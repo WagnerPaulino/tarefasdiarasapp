@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:tarefasdiarasapp/pages/HomePage.dart';
 
 import 'main.dart';
 
