@@ -10,7 +10,8 @@ class EditTarefaPage extends StatefulWidget {
 }
 
 class _EditTarefaPageState extends State<EditTarefaPage> {
-  TarefaStore tarefaStore = new TarefaStore();
+  Tarefa tarefa = new Tarefa();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,35 +21,64 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
           ToolBarComponent("Tarefas"),
           SliverFillRemaining(
               child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text('You will never be satisfied.'),
-              Text('You\’re like me. I’m never satisfied.'),
-              RaisedButton(
-                child: Text('Marcar hora'),
-                onPressed: () async {
-                  final datePicker = await showTimePicker(
-                      context: context, initialTime: TimeOfDay.now());
-                  print(datePicker);
-                },
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: 'Nome da Tarefa'),
+                        onChanged: (value) {
+                          tarefa.nome = value;
+                        },
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                width: double.infinity,
+                child: FlatButton(
+                  child: tarefa.timeOfDay == null
+                      ? Text('Marcar hora')
+                      : Text(tarefa.timeOfDay.format(context)),
+                  onPressed: () async {
+                    final datePicker = await showTimePicker(
+                        context: context, initialTime: TimeOfDay.now());
+                    setState(() {
+                      tarefa.timeOfDay = datePicker;
+                    });
+                  },
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new FlatButton(
-                    child: new Text("Fechar"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    verticalDirection: VerticalDirection.up,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          new FlatButton(
+                            child: new Text("Cancelar"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          new RaisedButton(
+                            child: new Text("Salvar"),
+                            color: Colors.blueAccent,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-                  new RaisedButton(
-                    child: new Text("Salvar"),
-                    color: Colors.blueAccent,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
+                ),
+              )
             ],
           ))
         ],

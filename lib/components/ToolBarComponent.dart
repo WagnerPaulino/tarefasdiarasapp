@@ -10,10 +10,6 @@ class ToolBarComponent extends StatelessWidget {
         sliver: SliverAppBar(
           floating: true,
           expandedHeight: 10,
-          leading: Container(
-            height: 0,
-            width: 0,
-          ),
           primary: false,
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -21,11 +17,21 @@ class ToolBarComponent extends StatelessWidget {
                   color: Color.fromRGBO(0, 0, 0, 0.2),
                   style: BorderStyle.solid)),
           actions: <Widget>[
-            Text(
-              this.title,
-              style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    this.title,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )
           ],
           backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         ));

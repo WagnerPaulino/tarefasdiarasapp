@@ -1,4 +1,5 @@
 // flutter packages pub run build_runner build --delete-conflicting-outputs
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 // Include generated file
@@ -23,4 +24,5 @@ class Tarefa {
   String key;
   String nome;
   DateTime createAt;
+  TimeOfDay timeOfDay;
 }
