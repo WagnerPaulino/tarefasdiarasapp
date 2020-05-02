@@ -11,10 +11,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TarefaStore tarefaStore = new TarefaStore();
+  TarefaStore tarefaStore = TarefaStore();
 
   @override
   Widget build(BuildContext context) {
+    print(tarefaStore.tarefas.toString());
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[

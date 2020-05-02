@@ -24,5 +24,5 @@ class Tarefa {
   String key;
   String nome;
   DateTime createAt;
-  TimeOfDay timeOfDay;
+  DateTime timeOfDay;
 }

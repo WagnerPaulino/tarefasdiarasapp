@@ -11,6 +11,7 @@ class EditTarefaPage extends StatefulWidget {
 
 class _EditTarefaPageState extends State<EditTarefaPage> {
   Tarefa tarefa = new Tarefa();
+  TarefaStore tarefaStore = TarefaStore();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -34,23 +35,27 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                           tarefa.nome = value;
                         },
                       ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FlatButton(
+                          child: tarefa.timeOfDay == null
+                              ? Text('Marcar hora')
+                              : Text(tarefa.timeOfDay.hour.toString() +
+                                  ":" +
+                                  tarefa.timeOfDay.minute.toString()),
+                          onPressed: () async {
+                            final t = await showTimePicker(
+                                context: context, initialTime: TimeOfDay.now());
+                            setState(() {
+                              final now = new DateTime.now();
+                              tarefa.timeOfDay = new DateTime(now.year,
+                                  now.month, now.day, t.hour, t.minute);
+                            });
+                          },
+                        ),
+                      ),
                     ],
                   )),
-              SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  child: tarefa.timeOfDay == null
-                      ? Text('Marcar hora')
-                      : Text(tarefa.timeOfDay.format(context)),
-                  onPressed: () async {
-                    final datePicker = await showTimePicker(
-                        context: context, initialTime: TimeOfDay.now());
-                    setState(() {
-                      tarefa.timeOfDay = datePicker;
-                    });
-                  },
-                ),
-              ),
               Flexible(
                 child: Padding(
                   padding: EdgeInsets.all(20),
@@ -71,6 +76,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                             color: Colors.blueAccent,
                             onPressed: () {
                               Navigator.of(context).pop();
+                              tarefaStore.save(tarefa);
                             },
                           ),
                         ],
