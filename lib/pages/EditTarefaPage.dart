@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
+import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 
 class EditTarefaPage extends StatefulWidget {
   EditTarefaPage({Key key}) : super(key: key);

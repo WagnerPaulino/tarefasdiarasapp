@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "454175847229",
+    "firebase_url": "https://tarefasdiarasapp.firebaseio.com",
+    "project_id": "tarefasdiarasapp",
+    "storage_bucket": "tarefasdiarasapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454175847229:android:5996ba29b18a3593f74b54",
+        "android_client_info": {
+          "package_name": "com.example.tarefasdiarasapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454175847229-74vador1omkrdfmurbg27dkaesjp1o8a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tarefasdiarasapp",
+            "certificate_hash": "617eaad0c7003948ad1626d29af791532fcd26bc"
+          }
+        },
+        {
+          "client_id": "454175847229-3i17lfabhhc1sdf3kc5s2edibb9efog5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5TBeVVmLADDuKdi2iVtUpns5paGsRhCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454175847229-3i17lfabhhc1sdf3kc5s2edibb9efog5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

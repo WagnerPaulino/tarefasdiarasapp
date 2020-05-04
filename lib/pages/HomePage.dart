@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
-import 'package:tarefasdiarasapp/models/Tarefa.dart';
+import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
@@ -14,15 +14,48 @@ class _MyHomePageState extends State<MyHomePage> {
   TarefaStore tarefaStore = TarefaStore();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(tarefaStore.tarefas.toString());
+    tarefaStore.findAll();
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
           ToolBarComponent("Minhas Tarefas"),
           SliverFillRemaining(
               child: Column(
-            children: <Widget>[],
+            children: <Widget>[
+              new Flexible(
+                child: Observer(
+                    builder: (_) => ListView.builder(
+                          itemBuilder: (c, i) {
+                            return Column(
+                              children: <Widget>[
+                                new ListTile(
+                                  title: tarefaStore.tarefas[i].nome == null
+                                      ? new Text("")
+                                      : new Text(tarefaStore.tarefas[i].nome),
+                                  subtitle:
+                                      tarefaStore.tarefas[i].timeOfDay == null
+                                          ? new Text("")
+                                          : new Text(tarefaStore
+                                                  .tarefas[i].timeOfDay.hour
+                                                  .toString() +
+                                              ":" +
+                                              tarefaStore
+                                                  .tarefas[i].timeOfDay.minute
+                                                  .toString()),
+                                ),
+                              ],
+                            );
+                          },
+                          itemCount: tarefaStore.tarefas.length,
+                        )),
+              )
+            ],
           ))
         ],
       ),
@@ -34,23 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           height: 60,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              new Flexible(
-                child: Observer(
-                    builder: (_) => ListView.builder(
-                          itemBuilder: (c, i) {
-                            return Column(
-                              children: <Widget>[
-                                new ListTile(
-                                  title: new Text(tarefaStore.tarefas[i].nome),
-                                ),
-                              ],
-                            );
-                          },
-                          itemCount: tarefaStore.tarefas.length,
-                        )),
-              )
-            ],
+            children: <Widget>[],
           ),
         ),
       ),

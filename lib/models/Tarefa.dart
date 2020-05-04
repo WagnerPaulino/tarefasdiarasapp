@@ -1,28 +1,32 @@
-// flutter packages pub run build_runner build --delete-conflicting-outputs
-import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
+import 'dart:convert';
 
-// Include generated file
-part 'Tarefa.g.dart';
+Tarefa tarefaFromJson(String str) => Tarefa.fromJson(json.decode(str));
 
-// This is the class used by rest of your codebase
-class TarefaStore = TarefaBase with _$TarefaStore;
-
-// The store-class
-
-abstract class TarefaBase with Store {
-  @observable
-  List<Tarefa> tarefas = [];
-
-  @action
-  void save(Tarefa tarefa) {
-    tarefas.add(tarefa);
-  }
-}
+String tarefaToJson(Tarefa data) => json.encode(data.toJson());
 
 class Tarefa {
   String key;
   String nome;
   DateTime createAt;
   DateTime timeOfDay;
+
+  Tarefa({
+    this.key,
+    this.nome,
+    this.createAt,
+    this.timeOfDay,
+  });
+
+  factory Tarefa.fromJson(Map<String, dynamic> json) => Tarefa(
+      key: json["key"],
+      nome: json["nome"],
+      createAt: json["createAt"].toDate(),
+      timeOfDay: json["timeOfDay"].toDate());
+
+  Map<String, dynamic> toJson() => {
+    "key": key,
+    "nome": nome,
+    "createAt": createAt,
+    "timeOfDay": timeOfDay,
+  };
 }
