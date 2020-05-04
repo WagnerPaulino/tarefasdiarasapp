@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class ToolBarComponent extends StatelessWidget {
   ToolBarComponent(this.title);

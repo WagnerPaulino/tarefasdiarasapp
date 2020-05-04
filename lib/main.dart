@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
+import 'package:tarefasdiarasapp/pages/SmashPage.dart';
 
 import 'app_module.dart';
 
