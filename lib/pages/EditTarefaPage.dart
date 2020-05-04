@@ -4,7 +4,9 @@ import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 
 class EditTarefaPage extends StatefulWidget {
-  EditTarefaPage({Key key}) : super(key: key);
+  EditTarefaPage({Key key, this.tarefaKey}) : super(key: key);
+
+  String tarefaKey;
 
   @override
   _EditTarefaPageState createState() => _EditTarefaPageState();
@@ -14,6 +16,22 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
   Tarefa tarefa = new Tarefa();
   TarefaStore tarefaStore = TarefaStore();
   final _formKey = GlobalKey<FormState>();
+  final nomeFieldCtl = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.tarefaKey == null) {
+      tarefa = new Tarefa();
+    } else {
+      tarefaStore.findOne(widget.tarefaKey).then((tarefa) {
+        setState(() {
+          this.tarefa = tarefa;
+          this.nomeFieldCtl.text = this.tarefa.nome;
+        });
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +53,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                         onChanged: (value) {
                           tarefa.nome = value;
                         },
+                        controller: nomeFieldCtl,
                       ),
                       SizedBox(
                         width: double.infinity,
@@ -46,7 +65,10 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                                   tarefa.timeOfDay.minute.toString()),
                           onPressed: () async {
                             final t = await showTimePicker(
-                                context: context, initialTime: TimeOfDay.now());
+                                context: context,
+                                initialTime: tarefa.timeOfDay == null
+                                    ? TimeOfDay.now()
+                                    : TimeOfDay.fromDateTime(tarefa.timeOfDay));
                             setState(() {
                               final now = new DateTime.now();
                               tarefa.timeOfDay = new DateTime(now.year,
@@ -76,8 +98,9 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                             child: new Text("Salvar"),
                             color: Colors.blueAccent,
                             onPressed: () {
-                              Navigator.of(context).pop();
-                              tarefaStore.save(tarefa);
+                              tarefaStore.save(tarefa).then((v) {
+                                Navigator.of(context).pop(context);
+                              });
                             },
                           ),
                         ],

@@ -15,12 +15,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    this.findAll();
     super.initState();
+  }
+
+  void findAll() {
+    tarefaStore.findAll();
   }
 
   @override
   Widget build(BuildContext context) {
-    tarefaStore.findAll();
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -29,6 +33,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
             children: <Widget>[
               new Flexible(
+                  child: RefreshIndicator(
+                onRefresh: () => tarefaStore.findAll(),
                 child: Observer(
                     builder: (_) => ListView.builder(
                           itemBuilder: (c, i) {
@@ -48,13 +54,43 @@ class _MyHomePageState extends State<MyHomePage> {
                                               tarefaStore
                                                   .tarefas[i].timeOfDay.minute
                                                   .toString()),
+                                  onTap: () => Navigator.pushNamed(
+                                          context,
+                                          '/edit-tarefa/' +
+                                              tarefaStore.tarefas[i].key)
+                                      .then((v) {
+                                    setState(() {
+                                      this.findAll();
+                                    });
+                                  }),
+                                  trailing: IconButton(
+                                    icon: Icon(
+                                        tarefaStore.tarefas[i].done
+                                            ? Icons.check_box
+                                            : Icons.check_box_outline_blank,
+                                        color: tarefaStore.tarefas[i].done
+                                            ? Colors.green
+                                            : null),
+                                    onPressed: () {
+                                      this
+                                          .tarefaStore
+                                          .toggleDone(
+                                              tarefaStore.tarefas[i].key)
+                                          .then((tarefa) {
+                                        setState(() {
+                                          tarefaStore.tarefas[i].done =
+                                              !tarefaStore.tarefas[i].done;
+                                        });
+                                      });
+                                    },
+                                  ),
                                 ),
                               ],
                             );
                           },
                           itemCount: tarefaStore.tarefas.length,
                         )),
-              )
+              ))
             ],
           ))
         ],
@@ -73,7 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/edit-tarefa'),
+        onPressed: () => Navigator.pushNamed(context, '/edit-tarefa').then((v) {
+          setState(() {
+            this.findAll();
+          });
+        }),
         tooltip: 'Adicionar Tarefa',
         child: Icon(Icons.add),
       ),

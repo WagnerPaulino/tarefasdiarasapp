@@ -29,7 +29,7 @@ mixin _$TarefaStore on TarefaBase, Store {
   final _$TarefaBaseActionController = ActionController(name: 'TarefaBase');
 
   @override
-  void save(Tarefa tarefa) {
+  Future<void> save(Tarefa tarefa) {
     final _$actionInfo = _$TarefaBaseActionController.startAction();
     try {
       return super.save(tarefa);

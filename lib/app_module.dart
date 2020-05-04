@@ -6,7 +6,6 @@ import 'package:tarefasdiarasapp/pages/HomePage.dart';
 import 'main.dart';
 
 class AppModule extends MainModule {
-
   @override
   List<Bind> get binds => [];
 
@@ -14,6 +13,10 @@ class AppModule extends MainModule {
   List<Router> get routers => [
         Router("/", child: (_, args) => MyHomePage()),
         Router('/edit-tarefa', child: (_, args) => EditTarefaPage()),
+        Router('/edit-tarefa/:tarefaKey',
+            child: (_, args) => EditTarefaPage(
+                  tarefaKey: args.params['tarefaKey'],
+                )),
       ];
 
   @override

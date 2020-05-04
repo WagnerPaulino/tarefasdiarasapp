@@ -9,24 +9,22 @@ class Tarefa {
   String nome;
   DateTime createAt;
   DateTime timeOfDay;
+  bool done;
 
-  Tarefa({
-    this.key,
-    this.nome,
-    this.createAt,
-    this.timeOfDay,
-  });
+  Tarefa({this.key, this.nome, this.createAt, this.timeOfDay, this.done});
 
   factory Tarefa.fromJson(Map<String, dynamic> json) => Tarefa(
       key: json["key"],
       nome: json["nome"],
       createAt: json["createAt"].toDate(),
-      timeOfDay: json["timeOfDay"].toDate());
+      timeOfDay: json["timeOfDay"].toDate(),
+      done: json["done"]);
 
   Map<String, dynamic> toJson() => {
-    "key": key,
-    "nome": nome,
-    "createAt": createAt,
-    "timeOfDay": timeOfDay,
-  };
+        "key": key,
+        "nome": nome,
+        "createAt": createAt,
+        "timeOfDay": timeOfDay,
+        "done": done,
+      };
 }
