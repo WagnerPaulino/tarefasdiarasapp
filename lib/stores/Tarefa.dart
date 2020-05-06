@@ -42,7 +42,7 @@ abstract class TarefaBase with Store {
   }
 
   Future<void> insert(Tarefa tarefa) {
-    tarefa.createAt = DateTime.now();
+    tarefa.createdAt = DateTime.now();
     tarefa.done = false;
     return databaseReference
         .collection(collection)
@@ -51,7 +51,7 @@ abstract class TarefaBase with Store {
   }
 
   Future<void> update(Tarefa tarefa) {
-    tarefa.createAt = DateTime.now();
+    tarefa.updatedAt = DateTime.now();
     return databaseReference
         .collection(collection)
         .document(tarefa.key)
@@ -62,6 +62,18 @@ abstract class TarefaBase with Store {
     this.tarefas = [];
     var response =
         await databaseReference.collection(collection).getDocuments();
+    this.tarefas = response.documents.map((f) {
+      Tarefa t = Tarefa.fromJson(f.data);
+      t.key = f.documentID;
+      return t;
+    }).toList();
+    return this.tarefas;
+  }
+
+  Future<List<Tarefa>> findAllByUserKey(String userKey) async {
+    this.tarefas = [];
+    var response =
+        await databaseReference.collection(collection).where("user.id",isEqualTo: userKey).getDocuments();
     this.tarefas = response.documents.map((f) {
       Tarefa t = Tarefa.fromJson(f.data);
       t.key = f.documentID;

@@ -9,24 +9,32 @@ String tarefaToJson(Tarefa data) => json.encode(data.toJson());
 class Tarefa {
   String key;
   String nome;
-  DateTime createAt;
+  DateTime createdAt;
+  DateTime updatedAt;
   DateTime timeOfDay;
   bool done;
   User user;
 
-  Tarefa({this.key, this.nome, this.createAt, this.timeOfDay, this.done});
+  Tarefa(
+      {this.key,
+      this.nome,
+      this.createdAt,
+      this.updatedAt,
+      this.timeOfDay,
+      this.done});
 
   factory Tarefa.fromJson(Map<String, dynamic> json) => Tarefa(
       key: json["key"],
       nome: json["nome"],
-      createAt: json["createAt"].toDate(),
-      timeOfDay: json["timeOfDay"].toDate(),
+      createdAt: json["createAt"].toDate(),
+      timeOfDay: json["timeOfDay"] != null ? json["timeOfDay"].toDate() : null,
       done: json["done"]);
 
   Map<String, dynamic> toJson() => {
         "key": key,
         "nome": nome,
-        "createAt": createAt,
+        "createAt": createdAt,
+        "updatedAt": updatedAt,
         "timeOfDay": timeOfDay,
         "done": done,
         "user": this.user.toJson()

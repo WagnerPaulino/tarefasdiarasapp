@@ -22,8 +22,10 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void findAll() {
-    tarefaStore.findAll();
+  Future<void> findAll() {
+    return user.login().then((user) {
+      tarefaStore.findAllByUserKey(user.id);
+    });
   }
 
   @override
@@ -38,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               new Flexible(
                   child: RefreshIndicator(
-                onRefresh: () => tarefaStore.findAll(),
+                onRefresh: () => this.findAll(),
                 child: Observer(
                     builder: (_) => ListView.builder(
                           itemBuilder: (c, i) {
