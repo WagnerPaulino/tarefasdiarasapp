@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tarefasdiarasapp/components/MainDrawerComponent.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
@@ -36,6 +37,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawerComponent(),
       body: CustomScrollView(
         slivers: <Widget>[
           ToolBarComponent("Tarefas"),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:tarefasdiarasapp/components/MainDrawerComponent.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
+import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
@@ -12,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TarefaStore tarefaStore = TarefaStore();
+  Usuario user = new Usuario();
 
   @override
   void initState() {
@@ -26,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawerComponent(),
       body: CustomScrollView(
         slivers: <Widget>[
           ToolBarComponent("Minhas Tarefas"),

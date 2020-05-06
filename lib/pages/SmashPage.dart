@@ -14,6 +14,16 @@ class SmashPage extends StatefulWidget {
 class _SmashPageState extends State<SmashPage> {
   Usuario user = new Usuario();
   bool isLogged = false;
+  
+  @override
+  void initState() {
+    user.getGoogleSignIn().isSignedIn().then((isLogged) {
+      if(isLogged) {
+        Navigator.pushNamed(context, "/");
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

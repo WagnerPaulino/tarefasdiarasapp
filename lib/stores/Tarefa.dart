@@ -3,6 +3,9 @@ import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
+import 'package:tarefasdiarasapp/models/User.dart';
+
+import 'Usuario.dart';
 
 // Include generated file
 part 'Tarefa.g.dart';
@@ -15,18 +18,27 @@ class TarefaStore = TarefaBase with _$TarefaStore;
 abstract class TarefaBase with Store {
   final databaseReference = Firestore.instance;
 
+  final Usuario user = new Usuario();
+
   final collection = "tarefas";
 
   @observable
   List<Tarefa> tarefas = [];
 
   @action
-  Future<void> save(Tarefa tarefa) {
-    if (tarefa.key == null) {
-      return this.insert(tarefa);
-    } else {
-      return this.update(tarefa);
-    }
+  Future save(Tarefa tarefa) {
+    return user.getGoogleSignIn().signIn().then((v) {
+      if (v != null) {
+        tarefa.user = User(v);
+        if (tarefa.key == null) {
+          return this.insert(tarefa);
+        } else {
+          return this.update(tarefa);
+        }
+      } else {
+        return Future(() => false);
+      }
+    });
   }
 
   Future<void> insert(Tarefa tarefa) {

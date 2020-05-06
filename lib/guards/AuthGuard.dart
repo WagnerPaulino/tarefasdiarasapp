@@ -7,7 +7,6 @@ class AuthGuard implements RouteGuard {
 
   @override
   bool canActivate(String url) {
-    print(user);
     return true;
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'User.dart';
+
 Tarefa tarefaFromJson(String str) => Tarefa.fromJson(json.decode(str));
 
 String tarefaToJson(Tarefa data) => json.encode(data.toJson());
@@ -10,6 +12,7 @@ class Tarefa {
   DateTime createAt;
   DateTime timeOfDay;
   bool done;
+  User user;
 
   Tarefa({this.key, this.nome, this.createAt, this.timeOfDay, this.done});
 
@@ -26,5 +29,6 @@ class Tarefa {
         "createAt": createAt,
         "timeOfDay": timeOfDay,
         "done": done,
+        "user": this.user.toJson()
       };
 }
