@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
 import 'package:tarefasdiarasapp/pages/SmashPage.dart';
+import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 import 'app_module.dart';
 
-void main() => runApp(ModularApp(module: AppModule()));
+void main() {
+  Usuario user = Usuario();
+  
+  return runApp(ModularApp(module: AppModule(user.getGoogleSignIn().currentUser)));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -17,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/",
+      initialRoute: "/loading",
       onGenerateRoute: Modular.generateRoute,
       home: MyHomePage(),
     );
