@@ -58,6 +58,13 @@ abstract class TarefaBase with Store {
         .setData(tarefa.toJson());
   }
 
+  Future<void> delete(Tarefa tarefa) {
+    return databaseReference
+        .collection(collection)
+        .document(tarefa.key)
+        .delete();
+  }
+
   Future<List<Tarefa>> findAll() async {
     this.tarefas = [];
     var response =
@@ -72,8 +79,10 @@ abstract class TarefaBase with Store {
 
   Future<List<Tarefa>> findAllByUserKey(String userKey) async {
     this.tarefas = [];
-    var response =
-        await databaseReference.collection(collection).where("user.id",isEqualTo: userKey).getDocuments();
+    var response = await databaseReference
+        .collection(collection)
+        .where("user.id", isEqualTo: userKey)
+        .getDocuments();
     this.tarefas = response.documents.map((f) {
       Tarefa t = Tarefa.fromJson(f.data);
       t.key = f.documentID;

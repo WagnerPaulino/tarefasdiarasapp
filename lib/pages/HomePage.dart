@@ -52,49 +52,66 @@ class _MyHomePageState extends State<MyHomePage> {
                             ? new Text("Tarefas")
                             : Column(
                                 children: <Widget>[
-                                  new ListTile(
-                                    title: tarefaStore.tarefas[i].nome == null
-                                        ? new Text("")
-                                        : new Text(tarefaStore.tarefas[i].nome),
-                                    subtitle:
-                                        tarefaStore.tarefas[i].timeOfDay == null
-                                            ? new Text("")
-                                            : new Text(tarefaStore
-                                                    .tarefas[i].timeOfDay.hour
-                                                    .toString() +
-                                                ":" +
-                                                tarefaStore
-                                                    .tarefas[i].timeOfDay.minute
-                                                    .toString()),
-                                    onTap: () => Navigator.pushNamed(
-                                            context,
-                                            '/edit-tarefa/' +
-                                                tarefaStore.tarefas[i].key)
-                                        .then((v) {
-                                      setState(() {
-                                        this.findAll();
+                                  Dismissible(
+                                    key: ValueKey(tarefaStore.tarefas[i].key),
+                                    background: Container(
+                                      child: Icon(Icons.delete),
+                                      color: Colors.red,
+                                    ),
+                                    onDismissed: (v) {
+                                      tarefaStore
+                                          .delete(tarefaStore.tarefas[i])
+                                          .then((v) {
+                                        tarefaStore.tarefas.removeAt(i);
+                                        setState(() {});
                                       });
-                                    }),
-                                    trailing: IconButton(
-                                      icon: Icon(
-                                          tarefaStore.tarefas[i].done
-                                              ? Icons.check_box
-                                              : Icons.check_box_outline_blank,
-                                          color: tarefaStore.tarefas[i].done
-                                              ? Colors.green
-                                              : null),
-                                      onPressed: () {
-                                        this
-                                            .tarefaStore
-                                            .toggleDone(
-                                                tarefaStore.tarefas[i].key)
-                                            .then((tarefa) {
-                                          setState(() {
-                                            tarefaStore.tarefas[i].done =
-                                                !tarefaStore.tarefas[i].done;
-                                          });
+                                    },
+                                    child: new ListTile(
+                                      title: tarefaStore.tarefas[i].nome == null
+                                          ? new Text("")
+                                          : new Text(
+                                              tarefaStore.tarefas[i].nome),
+                                      subtitle:
+                                          tarefaStore.tarefas[i].timeOfDay ==
+                                                  null
+                                              ? new Text("")
+                                              : new Text(tarefaStore
+                                                      .tarefas[i].timeOfDay.hour
+                                                      .toString() +
+                                                  ":" +
+                                                  tarefaStore.tarefas[i]
+                                                      .timeOfDay.minute
+                                                      .toString()),
+                                      onTap: () => Navigator.pushNamed(
+                                              context,
+                                              '/edit-tarefa/' +
+                                                  tarefaStore.tarefas[i].key)
+                                          .then((v) {
+                                        setState(() {
+                                          this.findAll();
                                         });
-                                      },
+                                      }),
+                                      trailing: IconButton(
+                                        icon: Icon(
+                                            tarefaStore.tarefas[i].done
+                                                ? Icons.check_box
+                                                : Icons.check_box_outline_blank,
+                                            color: tarefaStore.tarefas[i].done
+                                                ? Colors.green
+                                                : null),
+                                        onPressed: () {
+                                          this
+                                              .tarefaStore
+                                              .toggleDone(
+                                                  tarefaStore.tarefas[i].key)
+                                              .then((tarefa) {
+                                            setState(() {
+                                              tarefaStore.tarefas[i].done =
+                                                  !tarefaStore.tarefas[i].done;
+                                            });
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ],
