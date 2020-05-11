@@ -18,7 +18,7 @@ class TarefaStore = TarefaBase with _$TarefaStore;
 abstract class TarefaBase with Store {
   final databaseReference = Firestore.instance;
 
-  final Usuario user = new Usuario();
+  final UsuarioStore user = new UsuarioStore();
 
   final collection = "tarefas";
 

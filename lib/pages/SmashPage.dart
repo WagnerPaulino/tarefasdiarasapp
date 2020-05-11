@@ -12,7 +12,7 @@ class SmashPage extends StatefulWidget {
 }
 
 class _SmashPageState extends State<SmashPage> {
-  Usuario user = new Usuario();
+  UsuarioStore user = new UsuarioStore();
   bool isLogged = false;
   
   @override

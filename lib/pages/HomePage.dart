@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/components/MainDrawerComponent.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
@@ -14,7 +15,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TarefaStore tarefaStore = TarefaStore();
-  Usuario user = new Usuario();
+  UsuarioStore user = Modular.get<UsuarioStore>();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -33,78 +36,72 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: MainDrawerComponent(),
       body: CustomScrollView(
+        physics: ScrollPhysics(),
         slivers: <Widget>[
           ToolBarComponent("Minhas Tarefas"),
           SliverFillRemaining(
               child: Column(
             children: <Widget>[
               new Flexible(
-                  child: RefreshIndicator(
-                onRefresh: () => this.findAll(),
-                child: Observer(
-                    builder: (_) => ListView.builder(
-                          itemBuilder: (c, i) {
-                            return i == 0
-                                ? new Text("Tarefas")
-                                : Column(
-                                    children: <Widget>[
-                                      new ListTile(
-                                        title: tarefaStore.tarefas[i].nome ==
-                                                null
+                  child: Observer(
+                builder: (_) => RefreshIndicator(
+                    onRefresh: () => this.findAll(),
+                    child: ListView.builder(
+                      itemBuilder: (c, i) {
+                        return i == 0
+                            ? new Text("Tarefas")
+                            : Column(
+                                children: <Widget>[
+                                  new ListTile(
+                                    title: tarefaStore.tarefas[i].nome == null
+                                        ? new Text("")
+                                        : new Text(tarefaStore.tarefas[i].nome),
+                                    subtitle:
+                                        tarefaStore.tarefas[i].timeOfDay == null
                                             ? new Text("")
-                                            : new Text(
-                                                tarefaStore.tarefas[i].nome),
-                                        subtitle:
-                                            tarefaStore.tarefas[i].timeOfDay ==
-                                                    null
-                                                ? new Text("")
-                                                : new Text(tarefaStore
-                                                        .tarefas[i]
-                                                        .timeOfDay
-                                                        .hour
-                                                        .toString() +
-                                                    ":" +
-                                                    tarefaStore.tarefas[i]
-                                                        .timeOfDay.minute
-                                                        .toString()),
-                                        onTap: () => Navigator.pushNamed(
-                                                context,
-                                                '/edit-tarefa/' +
-                                                    tarefaStore.tarefas[i].key)
-                                            .then((v) {
+                                            : new Text(tarefaStore
+                                                    .tarefas[i].timeOfDay.hour
+                                                    .toString() +
+                                                ":" +
+                                                tarefaStore
+                                                    .tarefas[i].timeOfDay.minute
+                                                    .toString()),
+                                    onTap: () => Navigator.pushNamed(
+                                            context,
+                                            '/edit-tarefa/' +
+                                                tarefaStore.tarefas[i].key)
+                                        .then((v) {
+                                      setState(() {
+                                        this.findAll();
+                                      });
+                                    }),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                          tarefaStore.tarefas[i].done
+                                              ? Icons.check_box
+                                              : Icons.check_box_outline_blank,
+                                          color: tarefaStore.tarefas[i].done
+                                              ? Colors.green
+                                              : null),
+                                      onPressed: () {
+                                        this
+                                            .tarefaStore
+                                            .toggleDone(
+                                                tarefaStore.tarefas[i].key)
+                                            .then((tarefa) {
                                           setState(() {
-                                            this.findAll();
+                                            tarefaStore.tarefas[i].done =
+                                                !tarefaStore.tarefas[i].done;
                                           });
-                                        }),
-                                        trailing: IconButton(
-                                          icon: Icon(
-                                              tarefaStore.tarefas[i].done
-                                                  ? Icons.check_box
-                                                  : Icons
-                                                      .check_box_outline_blank,
-                                              color: tarefaStore.tarefas[i].done
-                                                  ? Colors.green
-                                                  : null),
-                                          onPressed: () {
-                                            this
-                                                .tarefaStore
-                                                .toggleDone(
-                                                    tarefaStore.tarefas[i].key)
-                                                .then((tarefa) {
-                                              setState(() {
-                                                tarefaStore.tarefas[i].done =
-                                                    !tarefaStore
-                                                        .tarefas[i].done;
-                                              });
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                          },
-                          itemCount: tarefaStore.tarefas.length,
-                        )),
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                      },
+                      itemCount: tarefaStore.tarefas.length,
+                    )),
               ))
             ],
           ))

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class MainDrawerComponent extends StatelessWidget {
-  Usuario user = new Usuario();
+  UsuarioStore user = new UsuarioStore();
 
   @override
   Widget build(BuildContext context) {

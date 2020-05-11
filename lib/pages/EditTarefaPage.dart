@@ -1,12 +1,12 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+//import 'package:path_provider/path_provider.dart';
 import 'package:tarefasdiarasapp/components/MainDrawerComponent.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
-import 'dart:async';
-import 'package:path/path.dart' show join;
+//import 'dart:async';
+//import 'package:path/path.dart' show join;
 
 class EditTarefaPage extends StatefulWidget {
   EditTarefaPage({Key key, this.tarefaKey, @required this.camera})
@@ -24,20 +24,17 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
   Tarefa tarefa = new Tarefa();
   TarefaStore tarefaStore = TarefaStore();
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final nomeFieldCtl = TextEditingController();
-  CameraController cameraController;
-  Future<void> _initializeControllerFuture;
 
   @override
   void initState() {
     processData();
-    configCamera();
     super.initState();
   }
 
   @override
   void dispose() {
-    cameraController.dispose();
     super.dispose();
   }
 
@@ -54,19 +51,12 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
     }
   }
 
-  configCamera() {
-    cameraController = CameraController(
-      widget.camera,
-      ResolutionPreset.medium,
-    );
-    _initializeControllerFuture = cameraController.initialize();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MainDrawerComponent(),
       body: CustomScrollView(
+        physics: ScrollPhysics(),
         slivers: <Widget>[
           ToolBarComponent("Tarefas"),
           SliverFillRemaining(
@@ -102,36 +92,6 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                             tarefa.timeOfDay = new DateTime(
                                 now.year, now.month, now.day, t.hour, t.minute);
                           });
-                        },
-                      ),
-                      Container(
-                        height: 350,
-                        child: FutureBuilder<void>(
-                          initialData: Text("Não há fotos"),
-                          future: _initializeControllerFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return CameraPreview(cameraController);
-                            } else {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                      ),
-                      FlatButton(
-                        child: Text("Tirar foto"),
-                        onPressed: () async {
-                          try {
-                            await _initializeControllerFuture;
-                            final path = join(
-                              (await getTemporaryDirectory()).path,
-                              '${DateTime.now()}.png',
-                            );
-                            await cameraController.takePicture(path);
-                          } catch (e) {
-                            print(e);
-                          }
                         },
                       ),
                     ],

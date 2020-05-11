@@ -11,7 +11,7 @@ class User {
   String email;
   String photoUrl;
 
-  User(GoogleSignInAccount signIn) {
+  User(var signIn) {
     this.id = signIn.id;
     this.displayName = signIn.displayName;
     this.email = signIn.email;

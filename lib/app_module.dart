@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/pages/EditTarefaPage.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
 import 'package:tarefasdiarasapp/pages/SmashPage.dart';
+import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 import 'guards/AuthGuard.dart';
 import 'main.dart';
@@ -15,7 +16,9 @@ class AppModule extends MainModule {
   AppModule(this.camera);
   
   @override
-  List<Bind> get binds => [];
+  List<Bind> get binds => [
+    Bind<UsuarioStore>((i) => UsuarioStore()),
+  ];
 
   @override
   List<Router> get routers => [
