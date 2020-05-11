@@ -27,7 +27,7 @@ abstract class TarefaBase with Store {
 
   @action
   Future save(Tarefa tarefa) {
-    return user.getGoogleSignIn().signIn().then((v) {
+    return user.getGoogleSignIn().signInSilently().then((v) {
       if (v != null) {
         tarefa.user = User(v);
         if (tarefa.key == null) {

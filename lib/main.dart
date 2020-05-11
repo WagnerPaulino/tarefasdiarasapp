@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
@@ -6,10 +7,14 @@ import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 import 'app_module.dart';
 
-void main() {
-  Usuario user = Usuario();
-  
-  return runApp(ModularApp(module: AppModule(user.getGoogleSignIn().currentUser)));
+Future<void> main() async {
+WidgetsFlutterBinding.ensureInitialized();
+
+final cameras = await availableCameras();
+
+final firstCamera = cameras.first;
+
+  return runApp(ModularApp(module: AppModule(firstCamera)));
 }
 
 class MyApp extends StatelessWidget {
