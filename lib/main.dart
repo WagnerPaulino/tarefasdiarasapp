@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: "/loading",
+      navigatorKey: Modular.navigatorKey,
       onGenerateRoute: Modular.generateRoute,
       home: MyHomePage(),
     );

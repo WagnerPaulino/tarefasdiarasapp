@@ -62,8 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       tarefaStore
                                           .delete(tarefaStore.tarefas[i])
                                           .then((v) {
-                                        tarefaStore.tarefas.removeAt(i);
-                                        setState(() {});
+                                        setState(() {
+                                          tarefaStore.tarefas.removeAt(i);
+                                        });
                                       });
                                     },
                                     child: new ListTile(
