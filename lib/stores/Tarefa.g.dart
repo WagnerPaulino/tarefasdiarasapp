@@ -13,24 +13,23 @@ mixin _$TarefaStore on TarefaBase, Store {
 
   @override
   List<Tarefa> get tarefas {
-    _$tarefasAtom.context.enforceReadPolicy(_$tarefasAtom);
-    _$tarefasAtom.reportObserved();
+    _$tarefasAtom.reportRead();
     return super.tarefas;
   }
 
   @override
   set tarefas(List<Tarefa> value) {
-    _$tarefasAtom.context.conditionallyRunInAction(() {
+    _$tarefasAtom.reportWrite(value, super.tarefas, () {
       super.tarefas = value;
-      _$tarefasAtom.reportChanged();
-    }, _$tarefasAtom, name: '${_$tarefasAtom.name}_set');
+    });
   }
 
   final _$TarefaBaseActionController = ActionController(name: 'TarefaBase');
 
   @override
   Future<dynamic> save(Tarefa tarefa) {
-    final _$actionInfo = _$TarefaBaseActionController.startAction();
+    final _$actionInfo =
+        _$TarefaBaseActionController.startAction(name: 'TarefaBase.save');
     try {
       return super.save(tarefa);
     } finally {
@@ -40,7 +39,8 @@ mixin _$TarefaStore on TarefaBase, Store {
 
   @override
   String toString() {
-    final string = 'tarefas: ${tarefas.toString()}';
-    return '{$string}';
+    return '''
+tarefas: ${tarefas}
+    ''';
   }
 }

@@ -13,22 +13,21 @@ mixin _$UsuarioStore on UsuarioBase, Store {
 
   @override
   User get user {
-    _$userAtom.context.enforceReadPolicy(_$userAtom);
-    _$userAtom.reportObserved();
+    _$userAtom.reportRead();
     return super.user;
   }
 
   @override
   set user(User value) {
-    _$userAtom.context.conditionallyRunInAction(() {
+    _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
-      _$userAtom.reportChanged();
-    }, _$userAtom, name: '${_$userAtom.name}_set');
+    });
   }
 
   @override
   String toString() {
-    final string = 'user: ${user.toString()}';
-    return '{$string}';
+    return '''
+user: ${user}
+    ''';
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
@@ -12,7 +13,7 @@ class SmashPage extends StatefulWidget {
 }
 
 class _SmashPageState extends State<SmashPage> {
-  UsuarioStore user = new UsuarioStore();
+  UsuarioStore user = Modular.get<UsuarioStore>();
   bool isLogged = false;
   
   @override
@@ -30,7 +31,7 @@ class _SmashPageState extends State<SmashPage> {
     return Scaffold(
         body: CustomScrollView(
       slivers: <Widget>[
-        ToolBarComponent("Aguarde"),
+        ToolBarComponent("Identifique-se!"),
         SliverFillRemaining(
           child: Center(
               child: RaisedButton(

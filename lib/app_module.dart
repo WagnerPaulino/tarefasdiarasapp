@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/pages/EditTarefaPage.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
 import 'package:tarefasdiarasapp/pages/SmashPage.dart';
+import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 import 'guards/AuthGuard.dart';
@@ -18,6 +19,7 @@ class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
     Bind<UsuarioStore>((i) => UsuarioStore()),
+    Bind<TarefaStore>((i) => TarefaStore()),
   ];
 
   @override
