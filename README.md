@@ -4,6 +4,5 @@ A Flutter project to record your daily tasks.
 
 This project use
 * mobx
-* firebase database
+* firebase firestore
 * firebase auth
-* firebase cloud functions
