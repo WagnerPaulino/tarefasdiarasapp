@@ -43,6 +43,7 @@ abstract class TarefaBase with Store {
 
   Future<void> insert(Tarefa tarefa) {
     tarefa.createdAt = DateTime.now();
+    tarefa.doneUpdated = DateTime.now();
     tarefa.done = false;
     return databaseReference
         .collection(collection)
@@ -88,6 +89,7 @@ abstract class TarefaBase with Store {
       t.key = f.documentID;
       return t;
     }).toList();
+    await this.updateDoneFromList(tarefas);
     return this.tarefas;
   }
 
@@ -101,8 +103,45 @@ abstract class TarefaBase with Store {
 
   Future<Tarefa> toggleDone(String key) async {
     var tarefa = await this.findOne(key);
+    tarefa.doneUpdated = DateTime.now();
     tarefa.done = !tarefa.done;
     this.save(tarefa);
     return tarefa;
+  }
+
+  Future<void> onlyUpdate(Tarefa tarefa) async {
+    await databaseReference
+        .collection(collection)
+        .document(tarefa.key)
+        .setData(tarefa.toJson());
+  }
+
+  Future<void> updateDone(String idUser) async {
+    var v = await user.getGoogleSignIn().signInSilently();
+    List<Tarefa> tarefas = await this.findAllByUserKey(v.id);
+    filterTarefaForUpdated(tarefas).forEach((t) async {
+      t.done = false;
+      t.doneUpdated = DateTime.now();
+      await this.onlyUpdate(t);
+    });
+  }
+
+  Future<void> updateDoneFromList(List<Tarefa> tarefas) async {
+    if (tarefas != null) {
+      await filterTarefaForUpdated(tarefas).forEach((t) async {
+        t.done = false;
+        t.doneUpdated = DateTime.now();
+        await this.onlyUpdate(t);
+      });
+    }
+  }
+
+  List<Tarefa> filterTarefaForUpdated(List<Tarefa> tarefas) {
+    return tarefas
+        .where((t) => DateTime(
+                t.doneUpdated.year, t.doneUpdated.month, t.doneUpdated.day)
+            .isBefore(DateTime(
+                DateTime.now().year, DateTime.now().month, DateTime.now().day)))
+        .toList();
   }
 }
