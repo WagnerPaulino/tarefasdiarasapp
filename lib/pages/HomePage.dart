@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/components/MainDrawerComponent.dart';
 import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
+import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
@@ -95,15 +96,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       color: tarefaStore.tarefas[i].done
                                           ? Colors.green
                                           : null),
-                                  onPressed: () {
-                                    this
+                                  onPressed: () async {
+                                    Tarefa t = await this
                                         .tarefaStore
-                                        .toggleDone(tarefaStore.tarefas[i].key)
-                                        .then((tarefa) {
-                                      setState(() {
-                                        tarefaStore.tarefas[i].done =
-                                            !tarefaStore.tarefas[i].done;
-                                      });
+                                        .toggleDone(tarefaStore.tarefas[i].key);
+                                    setState(() {
+                                      tarefaStore.tarefas[i] = t;
                                     });
                                   },
                                 ),

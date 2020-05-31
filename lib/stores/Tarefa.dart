@@ -128,10 +128,10 @@ abstract class TarefaBase with Store {
 
   Future<void> updateDoneFromList(List<Tarefa> tarefas) async {
     if (tarefas != null) {
-      await filterTarefaForUpdated(tarefas).forEach((t) async {
+      filterTarefaForUpdated(tarefas).forEach((t) {
         t.done = false;
         t.doneUpdated = DateTime.now();
-        await this.onlyUpdate(t);
+        this.onlyUpdate(t);
       });
     }
   }
