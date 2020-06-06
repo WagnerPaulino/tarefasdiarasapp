@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
-import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class SmashPage extends StatefulWidget {
@@ -15,11 +12,11 @@ class SmashPage extends StatefulWidget {
 class _SmashPageState extends State<SmashPage> {
   UsuarioStore user = Modular.get<UsuarioStore>();
   bool isLogged = false;
-  
+
   @override
   void initState() {
     user.getGoogleSignIn().isSignedIn().then((isLogged) {
-      if(isLogged) {
+      if (isLogged) {
         Navigator.pushNamed(context, "/");
       }
     });
@@ -29,24 +26,21 @@ class _SmashPageState extends State<SmashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(
-      slivers: <Widget>[
-        ToolBarComponent("Identifique-se!"),
-        SliverFillRemaining(
-          child: Center(
-              child: RaisedButton(
-            onPressed: () {
-              this.user.login().then((v) {
-                if (v != null) {
-                  print(v);
-                  Navigator.pushNamed(context, "/");
-                }
-              });
-            },
-            child: Text("Login"),
-          )),
-        )
-      ],
-    ));
+      appBar: AppBar(
+        title: Text('Identifiquei-se!'),
+      ),
+      body: Center(
+          child: RaisedButton(
+        onPressed: () {
+          this.user.login().then((v) {
+            if (v != null) {
+              print(v);
+              Navigator.of(context).pushReplacementNamed("/");
+            }
+          });
+        },
+        child: Text("Login"),
+      )),
+    );
   }
 }

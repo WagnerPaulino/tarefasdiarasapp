@@ -8,11 +8,11 @@ import 'package:tarefasdiarasapp/stores/Usuario.dart';
 import 'app_module.dart';
 
 Future<void> main() async {
-WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-final cameras = await availableCameras();
+  final cameras = await availableCameras();
 
-final firstCamera = cameras.first;
+  final firstCamera = cameras.first;
 
   return runApp(ModularApp(module: AppModule(firstCamera)));
 }
@@ -24,9 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tarefas',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
       initialRoute: "/loading",
       navigatorKey: Modular.navigatorKey,
       onGenerateRoute: Modular.generateRoute,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/components/MainDrawerComponent.dart';
-import 'package:tarefasdiarasapp/components/ToolBarComponent.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
@@ -18,102 +17,40 @@ class _MyHomePageState extends State<MyHomePage> {
   TarefaStore tarefaStore = Modular.get<TarefaStore>();
   UsuarioStore user = Modular.get<UsuarioStore>();
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
-    this.findAll();
     super.initState();
   }
 
-  Future<void> findAll() {
-    return user.getGoogleSignIn().signInSilently().then((user) {
-      tarefaStore.findAllByUserKey(user.id);
-    });
+  Future<List<Tarefa>> findAll() async {
+    var usuario = await user.getGoogleSignIn().signInSilently();
+    return tarefaStore.findAllByUserKey(usuario.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MainDrawerComponent(),
-      body: CustomScrollView(
-        physics: ScrollPhysics(),
-        slivers: <Widget>[
-          ToolBarComponent("Minhas Tarefas"),
-          SliverFillRemaining(
-              child: Column(
-            children: <Widget>[
-              new Flexible(
-                  child: Observer(
-                builder: (_) => RefreshIndicator(
-                    onRefresh: () => this.findAll(),
-                    child: ListView.builder(
-                      itemBuilder: (c, i) {
-                        return Column(
-                          children: <Widget>[
-                            Dismissible(
-                              key: ValueKey(tarefaStore.tarefas[i].key),
-                              background: Container(
-                                child: Icon(Icons.delete),
-                                color: Colors.red,
-                              ),
-                              onDismissed: (v) {
-                                tarefaStore
-                                    .delete(tarefaStore.tarefas[i])
-                                    .then((v) {
-                                  setState(() {
-                                    tarefaStore.tarefas.removeAt(i);
-                                  });
-                                });
-                              },
-                              child: new ListTile(
-                                title: tarefaStore.tarefas[i].nome == null
-                                    ? new Text("")
-                                    : new Text(tarefaStore.tarefas[i].nome),
-                                subtitle: tarefaStore.tarefas[i].timeOfDay ==
-                                        null
-                                    ? new Text("")
-                                    : new Text(tarefaStore
-                                            .tarefas[i].timeOfDay.hour
-                                            .toString() +
-                                        ":" +
-                                        tarefaStore.tarefas[i].timeOfDay.minute
-                                            .toString()),
-                                onTap: () => Navigator.pushNamed(
-                                        context,
-                                        '/edit-tarefa/' +
-                                            tarefaStore.tarefas[i].key)
-                                    .then((v) {
-                                  setState(() {
-                                    this.findAll();
-                                  });
-                                }),
-                                trailing: IconButton(
-                                  icon: Icon(
-                                      tarefaStore.tarefas[i].done
-                                          ? Icons.check_box
-                                          : Icons.check_box_outline_blank,
-                                      color: tarefaStore.tarefas[i].done
-                                          ? Colors.green
-                                          : null),
-                                  onPressed: () async {
-                                    Tarefa t = await this
-                                        .tarefaStore
-                                        .toggleDone(tarefaStore.tarefas[i].key);
-                                    setState(() {
-                                      tarefaStore.tarefas[i] = t;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                      itemCount: tarefaStore.tarefas.length,
-                    )),
-              ))
-            ],
+      appBar: AppBar(
+        title: Text('Minhas Tarefas'),
+      ),
+      body: Column(
+        children: <Widget>[
+          new Flexible(
+              child: Observer(
+            builder: (_) => RefreshIndicator(
+                onRefresh: () => this.findAll(),
+                child: FutureBuilder(
+                  initialData: [],
+                  future: findAll(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return renderList();
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )),
           ))
         ],
       ),
@@ -139,6 +76,65 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Adicionar Tarefa',
         child: Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget renderList() {
+    return ListView.builder(
+      itemBuilder: (c, i) {
+        return Column(
+          children: <Widget>[
+            Dismissible(
+              key: ValueKey(tarefaStore.tarefas[i].key),
+              background: Container(
+                child: Icon(Icons.delete),
+                color: Colors.red,
+              ),
+              onDismissed: (v) {
+                tarefaStore.delete(tarefaStore.tarefas[i]).then((v) {
+                  setState(() {
+                    tarefaStore.tarefas.removeAt(i);
+                  });
+                });
+              },
+              child: new ListTile(
+                title: tarefaStore.tarefas[i].nome == null
+                    ? new Text("")
+                    : new Text(tarefaStore.tarefas[i].nome),
+                subtitle: tarefaStore.tarefas[i].timeOfDay == null
+                    ? new Text("")
+                    : new Text(
+                        tarefaStore.tarefas[i].timeOfDay.hour.toString() +
+                            ":" +
+                            tarefaStore.tarefas[i].timeOfDay.minute.toString()),
+                onTap: () => Navigator.pushNamed(
+                        context, '/edit-tarefa/' + tarefaStore.tarefas[i].key)
+                    .then((v) {
+                  setState(() {
+                    this.findAll();
+                  });
+                }),
+                trailing: IconButton(
+                  icon: Icon(
+                      tarefaStore.tarefas[i].done
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      color: tarefaStore.tarefas[i].done ? Colors.green : null),
+                  onPressed: () async {
+                    Tarefa t = await this
+                        .tarefaStore
+                        .toggleDone(tarefaStore.tarefas[i].key);
+                    setState(() {
+                      tarefaStore.tarefas[i] = t;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      itemCount: tarefaStore.tarefas.length,
     );
   }
 }
