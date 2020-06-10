@@ -45,6 +45,7 @@ abstract class TarefaBase with Store {
     tarefa.createdAt = DateTime.now();
     tarefa.doneUpdated = DateTime.now();
     tarefa.done = false;
+    tarefa.order = tarefas.length;
     return databaseReference
         .collection(collection)
         .document()
@@ -144,5 +145,14 @@ abstract class TarefaBase with Store {
             .isBefore(DateTime(
                 DateTime.now().year, DateTime.now().month, DateTime.now().day)))
         .toList();
+  }
+
+  void reorderList(List<Tarefa> tas) async {
+    for (int i = 0; i < tas.length; i++) {
+      if (tas[i].order != i) {
+        tas[i].order = i;
+        await this.update(tas[i]);
+      }
+    }
   }
 }
