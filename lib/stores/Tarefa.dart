@@ -83,6 +83,7 @@ abstract class TarefaBase with Store {
     var response = await databaseReference
         .collection(collection)
         .where("user.id", isEqualTo: userKey)
+        .orderBy("order")
         .getDocuments();
     this.tarefas = response.documents.map((f) {
       Tarefa t = Tarefa.fromJson(f.data);

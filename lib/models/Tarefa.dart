@@ -15,6 +15,7 @@ class Tarefa {
   DateTime doneUpdated;
   bool done;
   User user;
+  int order;
 
   Tarefa(
       {this.key,
@@ -24,7 +25,8 @@ class Tarefa {
       this.timeOfDay,
       this.done,
       this.doneUpdated,
-      this.user});
+      this.user,
+      this.order});
 
   factory Tarefa.fromJson(Map<String, dynamic> json) => Tarefa(
       key: json["key"],
@@ -34,7 +36,8 @@ class Tarefa {
       done: json["done"],
       doneUpdated:
           json["doneUpdated"] != null ? json["doneUpdated"].toDate() : null,
-      user: User.fromJson(json["user"]));
+      user: User.fromJson(json["user"]),
+      order: json["order"] == null ? 0 : json["order"]);
 
   Map<String, dynamic> toJson() => {
         "key": key,
@@ -44,6 +47,7 @@ class Tarefa {
         "timeOfDay": timeOfDay,
         "done": done,
         "doneUpdated": doneUpdated,
-        "user": this.user.toJson()
+        "user": this.user.toJson(),
+        "order": order == null ? 0 : order
       };
 }
