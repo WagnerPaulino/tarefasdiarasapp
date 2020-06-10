@@ -86,11 +86,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void swapTarefas(int oldIndex, int newIndex) async {
     Tarefa oldIndexTarefa = this.tarefaStore.tarefas[oldIndex];
+    this.tarefaStore.tarefas.removeAt(oldIndex);
     int tam = this.tarefaStore.tarefas.length;
-    newIndex = newIndex >= tam ? tam - 1 : newIndex;
     setState(() {
-      this.tarefaStore.tarefas.removeAt(oldIndex);
-      this.tarefaStore.tarefas.insert(newIndex, oldIndexTarefa);
+      if (newIndex > tam) {
+        this.tarefaStore.tarefas.add(oldIndexTarefa);
+      } else {
+        this.tarefaStore.tarefas.insert(newIndex, oldIndexTarefa);
+      }
     });
     this.tarefaStore.reorderList(this.tarefaStore.tarefas);
   }

@@ -149,8 +149,10 @@ abstract class TarefaBase with Store {
 
   void reorderList(List<Tarefa> tas) async {
     for (int i = 0; i < tas.length; i++) {
+      print(tas[i].nome + tas[i].order.toString());
       if (tas[i].order != i) {
         tas[i].order = i;
+        print("Atualizado: " + tas[i].nome + tas[i].order.toString());
         await this.update(tas[i]);
       }
     }
