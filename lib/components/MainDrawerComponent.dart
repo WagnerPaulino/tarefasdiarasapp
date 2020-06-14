@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class MainDrawerComponent extends StatelessWidget {
   UsuarioStore user = Modular.get<UsuarioStore>();
+  TarefaStore tarefaStore = Modular.get<TarefaStore>();
 
   Future<GoogleSignInAccount> loadUser() {
     return user.getGoogleSignIn().signInSilently();
@@ -25,9 +27,7 @@ class MainDrawerComponent extends StatelessWidget {
                     future: loadUser(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        return snapshot.data.email == null
-                            ? Text(snapshot.data.displayName)
-                            : Text(snapshot.data.email);
+                        return renderPhotoUser(snapshot.data);
                       } else {
                         return Text('');
                       }
@@ -39,15 +39,10 @@ class MainDrawerComponent extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('Inicio'),
-            onTap: () {
-              user.navTo(context, "/");
-            },
-          ),
-          ListTile(
             title: Text('Sair'),
             onTap: () {
               user.logout().then((v) {
+                tarefaStore.tarefas = [];
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     '/loading', (Route<dynamic> route) => false);
               });
@@ -56,5 +51,34 @@ class MainDrawerComponent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget renderPhotoUser(GoogleSignInAccount usuario) {
+    return Center(
+      child: Column(
+        children: getPhotoWithNameFromUsuario(usuario),
+      ),
+    );
+  }
+
+  String getEmailOrNameFromUsuario(GoogleSignInAccount usuario) {
+    return usuario.email == null ? usuario.displayName : usuario.email;
+  }
+
+  List<Widget> getPhotoWithNameFromUsuario(GoogleSignInAccount usuario) {
+    if (usuario.photoUrl == null) {
+      return [
+        Icon(Icons.person),
+        Text(getEmailOrNameFromUsuario(usuario)),
+      ];
+    } else {
+      return [
+        CircleAvatar(
+          radius: 30.0,
+          backgroundImage: NetworkImage(usuario.photoUrl),
+        ),
+        Text(getEmailOrNameFromUsuario(usuario)),
+      ];
+    }
   }
 }

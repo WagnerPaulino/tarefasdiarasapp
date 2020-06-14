@@ -17,7 +17,7 @@ class _SmashPageState extends State<SmashPage> {
   void initState() {
     user.getGoogleSignIn().isSignedIn().then((isLogged) {
       if (isLogged) {
-        Navigator.pushNamed(context, "/");
+        Navigator.of(context).pushReplacementNamed("/");
       }
     });
     super.initState();
