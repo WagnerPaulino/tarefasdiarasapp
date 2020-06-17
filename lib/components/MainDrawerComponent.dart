@@ -5,8 +5,8 @@ import 'package:tarefasdiarasapp/stores/Usuario.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class MainDrawerComponent extends StatelessWidget {
-  UsuarioStore user = Modular.get<UsuarioStore>();
-  TarefaStore tarefaStore = Modular.get<TarefaStore>();
+  final UsuarioStore user = Modular.get<UsuarioStore>();
+  final TarefaStore tarefaStore = Modular.get<TarefaStore>();
 
   Future<GoogleSignInAccount> loadUser() {
     return user.getGoogleSignIn().signInSilently();

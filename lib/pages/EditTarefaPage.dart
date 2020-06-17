@@ -10,7 +10,7 @@ class EditTarefaPage extends StatefulWidget {
   EditTarefaPage({Key key, this.tarefaKey, @required this.camera})
       : super(key: key);
 
-  String tarefaKey;
+  final String tarefaKey;
 
   final CameraDescription camera;
 
@@ -62,7 +62,8 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   tarefaStore.save(tarefa).then((v) {
-                    Navigator.of(context).pop(context);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/', (Route<dynamic> route) => false);
                   });
                 }
               })

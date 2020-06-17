@@ -24,6 +24,21 @@ mixin _$TarefaStore on TarefaBase, Store {
     });
   }
 
+  final _$isLoadingListAtom = Atom(name: 'TarefaBase.isLoadingList');
+
+  @override
+  bool get isLoadingList {
+    _$isLoadingListAtom.reportRead();
+    return super.isLoadingList;
+  }
+
+  @override
+  set isLoadingList(bool value) {
+    _$isLoadingListAtom.reportWrite(value, super.isLoadingList, () {
+      super.isLoadingList = value;
+    });
+  }
+
   final _$TarefaBaseActionController = ActionController(name: 'TarefaBase');
 
   @override
@@ -40,7 +55,8 @@ mixin _$TarefaStore on TarefaBase, Store {
   @override
   String toString() {
     return '''
-tarefas: ${tarefas}
+tarefas: ${tarefas},
+isLoadingList: ${isLoadingList}
     ''';
   }
 }

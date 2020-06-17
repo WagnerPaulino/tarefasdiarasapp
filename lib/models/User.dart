@@ -1,4 +1,3 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:convert';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));

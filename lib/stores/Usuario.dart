@@ -12,14 +12,13 @@ class UsuarioStore = UsuarioBase with _$UsuarioStore;
 // The store-class
 
 abstract class UsuarioBase with Store {
-
   @observable
-  User user = null;
-  
+  User user;
+
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  
-  UsuarioStore() {
+
+  usuarioStore() {
     firebaseAuth.onAuthStateChanged.listen((v) {
       user = User(v);
     });
@@ -40,7 +39,7 @@ abstract class UsuarioBase with Store {
     return _googleSignIn;
   }
 
-  Future<bool> navTo(BuildContext context, String routeName) {
+  void navTo(BuildContext context, String routeName) {
     _googleSignIn.isSignedIn().then((isLogged) {
       if (isLogged) {
         Navigator.pushNamed(context, routeName);

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class ToolBarComponent extends StatelessWidget {
   ToolBarComponent(this.title);
 
-  String title = "";
+  final String title;
   Widget build(BuildContext context) {
     return SliverPadding(
         padding: EdgeInsets.only(top: 40, right: 15, left: 15),

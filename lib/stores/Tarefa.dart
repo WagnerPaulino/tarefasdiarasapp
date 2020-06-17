@@ -25,15 +25,18 @@ abstract class TarefaBase with Store {
   @observable
   List<Tarefa> tarefas = [];
 
+  @observable
+  bool isLoadingList = false;
+
   @action
   Future save(Tarefa tarefa) {
-    return user.getGoogleSignIn().signInSilently().then((v) {
+    return user.getGoogleSignIn().signInSilently().then((v) async {
       if (v != null) {
         tarefa.user = User(v);
         if (tarefa.key == null) {
-          return this.insert(tarefa);
+          await this.insert(tarefa);
         } else {
-          return this.update(tarefa);
+          await this.update(tarefa);
         }
       } else {
         return Future(() => false);
@@ -68,6 +71,7 @@ abstract class TarefaBase with Store {
   }
 
   Future<List<Tarefa>> findAll() async {
+    isLoadingList = true;
     this.tarefas = [];
     var response =
         await databaseReference.collection(collection).getDocuments();
@@ -76,10 +80,12 @@ abstract class TarefaBase with Store {
       t.key = f.documentID;
       return t;
     }).toList();
+    isLoadingList = false;
     return this.tarefas;
   }
 
   Future<List<Tarefa>> findAllByUserKey(String userKey) async {
+    isLoadingList = true;
     this.tarefas = [];
     var response = await databaseReference
         .collection(collection)
@@ -92,6 +98,7 @@ abstract class TarefaBase with Store {
       return t;
     }).toList();
     await this.updateDoneFromList(tarefas);
+    isLoadingList = false;
     return this.tarefas;
   }
 
