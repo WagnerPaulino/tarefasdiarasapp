@@ -9,6 +9,7 @@ String tarefaToJson(Tarefa data) => json.encode(data.toJson());
 class Tarefa {
   String key;
   String nome;
+  String detalhe;
   DateTime createdAt;
   DateTime updatedAt;
   DateTime timeOfDay;
@@ -20,6 +21,7 @@ class Tarefa {
   Tarefa(
       {this.key,
       this.nome,
+      this.detalhe,
       this.createdAt,
       this.updatedAt,
       this.timeOfDay,
@@ -31,6 +33,7 @@ class Tarefa {
   factory Tarefa.fromJson(Map<String, dynamic> json) => Tarefa(
       key: json["key"],
       nome: json["nome"],
+      detalhe: json["detalhe"],
       createdAt: json["createAt"].toDate(),
       timeOfDay: json["timeOfDay"] != null ? json["timeOfDay"].toDate() : null,
       done: json["done"],
@@ -42,6 +45,7 @@ class Tarefa {
   Map<String, dynamic> toJson() => {
         "key": key,
         "nome": nome,
+        "detalhe": detalhe,
         "createAt": createdAt,
         "updatedAt": updatedAt,
         "timeOfDay": timeOfDay,

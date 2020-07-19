@@ -50,7 +50,7 @@ class _ListTarefasComponentState extends State<ListTarefasComponent> {
               subtitle: this.widget.tarefas[i].timeOfDay == null
                   ? new Text("")
                   : new Text(this.widget.tarefas[i].timeOfDay.hour.toString() +
-                      ":" +
+                      "h" +
                       this.widget.tarefas[i].timeOfDay.minute.toString()),
               onTap: () {
                 Navigator.pushNamed(

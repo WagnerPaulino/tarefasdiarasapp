@@ -23,6 +23,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
   TarefaStore tarefaStore = TarefaStore();
   final _formKey = GlobalKey<FormState>();
   final nomeFieldCtl = TextEditingController();
+  final detalheFieldCtl = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
         setState(() {
           this.tarefa = tarefa;
           this.nomeFieldCtl.text = this.tarefa.nome;
+          this.detalheFieldCtl.text = this.tarefa.detalhe;
         });
       });
     }
@@ -91,11 +93,19 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                     },
                     controller: nomeFieldCtl,
                   ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: 'Deseja adicionar algum detalhe?'),
+                    onChanged: (value) {
+                      tarefa.detalhe = value;
+                    },
+                    controller: detalheFieldCtl,
+                  ),
                   FlatButton(
                     child: tarefa.timeOfDay == null
-                        ? Text('Marcar hora')
+                        ? Text('Deseja marcar um horário?')
                         : Text(tarefa.timeOfDay.hour.toString() +
-                            ":" +
+                            "h" +
                             tarefa.timeOfDay.minute.toString()),
                     onPressed: () async {
                       final t = await showTimePicker(
