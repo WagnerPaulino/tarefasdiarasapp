@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
+import 'package:date_format/date_format.dart';
 
 class ListTarefasComponent extends StatefulWidget {
   ListTarefasComponent({Key key, this.tarefas}) : super(key: key);
@@ -49,9 +50,7 @@ class _ListTarefasComponentState extends State<ListTarefasComponent> {
                   : new Text(this.widget.tarefas[i].nome),
               subtitle: this.widget.tarefas[i].timeOfDay == null
                   ? new Text("")
-                  : new Text(this.widget.tarefas[i].timeOfDay.hour.toString() +
-                      "h" +
-                      this.widget.tarefas[i].timeOfDay.minute.toString()),
+                  : new Text(formatDate(this.widget.tarefas[i].timeOfDay, [HH, ':', nn])),
               onTap: () {
                 Navigator.pushNamed(
                     context, '/edit-tarefa/' + this.widget.tarefas[i].key);

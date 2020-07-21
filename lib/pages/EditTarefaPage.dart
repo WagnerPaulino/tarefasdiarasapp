@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:path_provider/path_provider.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
+import 'package:date_format/date_format.dart';
 //import 'dart:async';
 //import 'package:path/path.dart' show join;
 
@@ -104,9 +105,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                   FlatButton(
                     child: tarefa.timeOfDay == null
                         ? Text('Deseja marcar um horário?')
-                        : Text(tarefa.timeOfDay.hour.toString() +
-                            "h" +
-                            tarefa.timeOfDay.minute.toString()),
+                        : Text(formatDate(tarefa.timeOfDay, [HH, ':', nn])),
                     onPressed: () async {
                       final t = await showTimePicker(
                           context: context,
