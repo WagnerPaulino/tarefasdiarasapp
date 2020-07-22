@@ -28,6 +28,10 @@ class _SmashPageState extends State<SmashPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Identifiquei-se!'),
+        leading: Container(
+          width: 0,
+          height: 0,
+        ),
       ),
       body: Center(
           child: Column(
