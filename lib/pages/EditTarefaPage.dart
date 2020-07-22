@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 //import 'package:path_provider/path_provider.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
@@ -57,19 +58,22 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
       appBar: AppBar(
         title: Text('Minhas Tarefas'),
         actions: <Widget>[
-          FlatButton(
-              child: Text(
-                "Salvar",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  tarefaStore.save(tarefa).then((v) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/', (Route<dynamic> route) => false);
-                  });
-                }
-              })
+          Observer(
+              builder: (_) => FlatButton(
+                  child: Text(
+                    this.tarefaStore.isSaving ? "Salvando..." : "Salvar",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: this.tarefaStore.isSaving
+                      ? null
+                      : () {
+                          if (_formKey.currentState.validate()) {
+                            tarefaStore.save(tarefa).then((v) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/', (Route<dynamic> route) => false);
+                            });
+                          }
+                        }))
         ],
       ),
       body: Column(

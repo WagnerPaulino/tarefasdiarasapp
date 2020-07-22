@@ -28,8 +28,12 @@ abstract class TarefaBase with Store {
   @observable
   bool isLoadingList = false;
 
+  @observable
+  bool isSaving = false;
+
   @action
   Future save(Tarefa tarefa) {
+    this.isSaving = true;
     return user.getGoogleSignIn().signInSilently().then((v) async {
       if (v != null) {
         tarefa.user = User(v);
@@ -39,8 +43,12 @@ abstract class TarefaBase with Store {
           await this.update(tarefa);
         }
       } else {
-        return Future(() => false);
+        return Future(() {
+          this.isSaving = false;
+        });
       }
+    }).then((value) {
+      this.isSaving = false;
     });
   }
 
@@ -52,7 +60,10 @@ abstract class TarefaBase with Store {
     return databaseReference
         .collection(collection)
         .document()
-        .setData(tarefa.toJson());
+        .setData(tarefa.toJson())
+        .then((value) {
+      this.isSaving = false;
+    });
   }
 
   Future<void> update(Tarefa tarefa) {
@@ -60,7 +71,10 @@ abstract class TarefaBase with Store {
     return databaseReference
         .collection(collection)
         .document(tarefa.key)
-        .setData(tarefa.toJson());
+        .setData(tarefa.toJson())
+        .then((value) {
+      this.isSaving = false;
+    });
   }
 
   Future<void> delete(Tarefa tarefa) {

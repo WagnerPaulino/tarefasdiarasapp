@@ -39,6 +39,21 @@ mixin _$TarefaStore on TarefaBase, Store {
     });
   }
 
+  final _$isSavingAtom = Atom(name: 'TarefaBase.isSaving');
+
+  @override
+  bool get isSaving {
+    _$isSavingAtom.reportRead();
+    return super.isSaving;
+  }
+
+  @override
+  set isSaving(bool value) {
+    _$isSavingAtom.reportWrite(value, super.isSaving, () {
+      super.isSaving = value;
+    });
+  }
+
   final _$TarefaBaseActionController = ActionController(name: 'TarefaBase');
 
   @override
@@ -56,7 +71,8 @@ mixin _$TarefaStore on TarefaBase, Store {
   String toString() {
     return '''
 tarefas: ${tarefas},
-isLoadingList: ${isLoadingList}
+isLoadingList: ${isLoadingList},
+isSaving: ${isSaving}
     ''';
   }
 }
