@@ -30,16 +30,27 @@ class _SmashPageState extends State<SmashPage> {
         title: Text('Identifiquei-se!'),
       ),
       body: Center(
-          child: RaisedButton(
-        onPressed: () {
-          this.user.login().then((v) {
-            if (v != null) {
-              print(v);
-              Navigator.of(context).pushReplacementNamed("/");
-            }
-          });
-        },
-        child: Text("Login"),
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text("Tarefas Diarias",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+          ),
+          RaisedButton(
+            onPressed: () {
+              this.user.login().then((v) {
+                if (v != null) {
+                  print(v);
+                  Navigator.of(context).pushReplacementNamed("/");
+                }
+              });
+            },
+            child: Text("Entrar com o Google"),
+          ),
+        ],
       )),
     );
   }
