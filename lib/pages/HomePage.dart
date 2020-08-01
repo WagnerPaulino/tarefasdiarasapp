@@ -27,9 +27,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<Tarefa>> findAll() async {
     var usuario = await user.getGoogleSignIn().signInSilently();
     if (usuario.id == null) {
-      return Future.any([]);
+      return await Future.any([]);
     } else {
-      return tarefaStore.findAllByUserKey(usuario.id);
+      return await tarefaStore.findAllByUserKey(usuario.id);
     }
   }
 

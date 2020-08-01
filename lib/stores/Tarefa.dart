@@ -1,6 +1,7 @@
 // flutter packages pub run build_runner build --delete-conflicting-outputs
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tarefasdiarasapp/config/NotificationConfig.dart';
 
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/models/User.dart';
@@ -19,6 +20,8 @@ abstract class TarefaBase with Store {
   final databaseReference = Firestore.instance;
 
   final UsuarioStore user = new UsuarioStore();
+
+  final NotificationConfig notificationConfig = new NotificationConfig();
 
   final collection = "tarefas";
 
@@ -48,6 +51,7 @@ abstract class TarefaBase with Store {
         });
       }
     }).then((value) {
+      this.notificationConfig.agendarNotificacoesTarefas(tarefas);
       this.isSaving = false;
     });
   }
@@ -77,11 +81,12 @@ abstract class TarefaBase with Store {
     });
   }
 
-  Future<void> delete(Tarefa tarefa) {
-    return databaseReference
+  Future<void> delete(Tarefa tarefa) async {
+    await databaseReference
         .collection(collection)
         .document(tarefa.key)
         .delete();
+    this.notificationConfig.agendarNotificacoesTarefas(tarefas);
   }
 
   Future<List<Tarefa>> findAll() async {
@@ -113,6 +118,7 @@ abstract class TarefaBase with Store {
     }).toList();
     await this.updateDoneFromList(tarefas);
     isLoadingList = false;
+    this.notificationConfig.agendarNotificacoesTarefas(tarefas);
     return this.tarefas;
   }
 
