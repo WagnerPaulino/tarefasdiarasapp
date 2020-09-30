@@ -38,6 +38,11 @@ class _SmashPageState extends State<SmashPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 48.0,
+            child: Image.asset('assets/logo.png'),
+          ),
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Text("Tarefas Diarias",
