@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 //import 'package:path_provider/path_provider.dart';
@@ -9,12 +8,10 @@ import 'package:date_format/date_format.dart';
 //import 'package:path/path.dart' show join;
 
 class EditTarefaPage extends StatefulWidget {
-  EditTarefaPage({Key key, this.tarefaKey, @required this.camera})
+  EditTarefaPage({Key key, this.tarefaKey})
       : super(key: key);
 
   final String tarefaKey;
-
-  final CameraDescription camera;
 
   @override
   _EditTarefaPageState createState() => _EditTarefaPageState();

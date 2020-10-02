@@ -1,20 +1,16 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_modular/src/routers/modular_router.dart';
 import 'package:tarefasdiarasapp/pages/EditTarefaPage.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
 import 'package:tarefasdiarasapp/pages/SmashPage.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
-
-import 'guards/AuthGuard.dart';
 import 'main.dart';
 
 class AppModule extends MainModule {
-
-  final CameraDescription camera;
   
-  AppModule(this.camera);
+  AppModule();
   
   @override
   List<Bind> get binds => [
@@ -23,14 +19,13 @@ class AppModule extends MainModule {
   ];
 
   @override
-  List<Router> get routers => [
-        Router("/", child: (_, args) => MyHomePage(), guards: [AuthGuard()]),
-        Router("/loading", child: (_, args) => SmashPage()),
-        Router('/edit-tarefa',
-            child: (_, args) => EditTarefaPage(camera: this.camera,)),
-        Router('/edit-tarefa/:tarefaKey',
+  List<ModularRouter> get routers => [
+    ModularRouter("/", child: (_, args) => MyHomePage()),
+    ModularRouter("/loading", child: (_, args) => SmashPage()),
+    ModularRouter('/edit-tarefa',
+            child: (_, args) => EditTarefaPage()),
+    ModularRouter('/edit-tarefa/:tarefaKey',
             child: (_, args) => EditTarefaPage(
-              camera: this.camera,
                   tarefaKey: args.params['tarefaKey'],
                 )),
       ];
