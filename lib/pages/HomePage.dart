@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        color: Colors.white,
+        color: Theme.of(context).bottomAppBarColor,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 17),
           height: 60,
