@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'User.dart';
+import 'Usuario.dart';
 
 Tarefa tarefaFromJson(String str) => Tarefa.fromJson(json.decode(str));
 
@@ -15,7 +15,7 @@ class Tarefa {
   DateTime timeOfDay;
   DateTime doneUpdated;
   bool done;
-  User user;
+  Usuario user;
   int order;
 
   Tarefa(
@@ -39,7 +39,7 @@ class Tarefa {
       done: json["done"],
       doneUpdated:
           json["doneUpdated"] != null ? json["doneUpdated"].toDate() : null,
-      user: User.fromJson(json["user"]),
+      user: Usuario.fromJson(json["user"]),
       order: json["order"] == null ? 0 : json["order"]);
 
   Map<String, dynamic> toJson() => {

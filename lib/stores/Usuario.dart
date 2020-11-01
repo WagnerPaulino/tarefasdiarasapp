@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobx/mobx.dart';
-import 'package:tarefasdiarasapp/models/User.dart';
+import 'package:tarefasdiarasapp/models/Usuario.dart';
 
 part 'Usuario.g.dart';
 
@@ -13,17 +13,14 @@ class UsuarioStore = UsuarioBase with _$UsuarioStore;
 
 abstract class UsuarioBase with Store {
   @observable
-  User user;
+  Usuario user;
 
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   usuarioStore() {
-    firebaseAuth.onAuthStateChanged.listen((v) {
-      user = User(v);
-    });
-    firebaseAuth.currentUser().then((v) {
-      user = User(v);
+    firebaseAuth.authStateChanges().listen((v) {
+      user = Usuario(v);
     });
   }
 

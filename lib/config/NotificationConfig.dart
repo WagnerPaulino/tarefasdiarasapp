@@ -14,7 +14,8 @@ class NotificationConfig {
     iosInitializationSettings = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     initializationSettings = InitializationSettings(
-        androidInitializationSettings, iosInitializationSettings);
+      android: androidInitializationSettings, iOS: iosInitializationSettings
+    );
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
     await flutterLocalNotificationsPlugin.cancelAll();
@@ -38,12 +39,12 @@ class NotificationConfig {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'tarefadiariaID', 'tarefadiariaTitle', 'tarefadiariaDescription',
-            priority: Priority.High,
-            importance: Importance.Max,
+            priority: Priority.high,
+            importance: Importance.max,
             ticker: 'tarefasdiarias');
     IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
     NotificationDetails notificationDetails =
-        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+        NotificationDetails(android: androidNotificationDetails, iOS: iosNotificationDetails);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         id, title, body, time, notificationDetails);
   }

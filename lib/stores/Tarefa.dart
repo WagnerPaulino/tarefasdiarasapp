@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tarefasdiarasapp/config/NotificationConfig.dart';
 
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
-import 'package:tarefasdiarasapp/models/User.dart';
+import 'package:tarefasdiarasapp/models/Usuario.dart';
 
 import 'Usuario.dart';
 
@@ -39,7 +39,7 @@ abstract class TarefaBase with Store {
     this.isSaving = true;
     return user.getGoogleSignIn().signInSilently().then((v) async {
       if (v != null) {
-        tarefa.user = User(v);
+        tarefa.user = Usuario(v);
         if (tarefa.key == null) {
           await this.insert(tarefa);
         } else {
@@ -95,7 +95,7 @@ abstract class TarefaBase with Store {
     var response =
         await databaseReference.collection(collection).getDocuments();
     this.tarefas = response.documents.map((f) {
-      Tarefa t = Tarefa.fromJson(f.data);
+      Tarefa t = Tarefa.fromJson(f.data());
       t.key = f.documentID;
       return t;
     }).toList();
@@ -112,7 +112,7 @@ abstract class TarefaBase with Store {
         .orderBy("order")
         .getDocuments();
     this.tarefas = response.documents.map((f) {
-      Tarefa t = Tarefa.fromJson(f.data);
+      Tarefa t = Tarefa.fromJson(f.data());
       t.key = f.documentID;
       return t;
     }).toList();
@@ -125,7 +125,7 @@ abstract class TarefaBase with Store {
   Future<Tarefa> findOne(String key) async {
     var response =
         await databaseReference.collection(collection).document(key).get();
-    Tarefa tarefa = Tarefa.fromJson(response.data);
+    Tarefa tarefa = Tarefa.fromJson(response.data());
     tarefa.key = response.documentID;
     return tarefa;
   }
