@@ -63,8 +63,8 @@ abstract class TarefaBase with Store {
     tarefa.order = tarefas.length;
     return databaseReference
         .collection(collection)
-        .document()
-        .setData(tarefa.toJson())
+        .doc()
+        .set(tarefa.toJson())
         .then((value) {
       this.isSaving = false;
     });
@@ -74,8 +74,8 @@ abstract class TarefaBase with Store {
     tarefa.updatedAt = DateTime.now();
     return databaseReference
         .collection(collection)
-        .document(tarefa.key)
-        .setData(tarefa.toJson())
+        .doc(tarefa.key)
+        .set(tarefa.toJson())
         .then((value) {
       this.isSaving = false;
     });
@@ -84,7 +84,7 @@ abstract class TarefaBase with Store {
   Future<void> delete(Tarefa tarefa) async {
     await databaseReference
         .collection(collection)
-        .document(tarefa.key)
+        .doc(tarefa.key)
         .delete();
     this.notificationConfig.agendarNotificacoesTarefas(tarefas);
   }
@@ -93,10 +93,10 @@ abstract class TarefaBase with Store {
     isLoadingList = true;
     this.tarefas = [];
     var response =
-        await databaseReference.collection(collection).getDocuments();
-    this.tarefas = response.documents.map((f) {
+        await databaseReference.collection(collection).get();
+    this.tarefas = response.docs.map((f) {
       Tarefa t = Tarefa.fromJson(f.data());
-      t.key = f.documentID;
+      t.key = f.id;
       return t;
     }).toList();
     isLoadingList = false;
@@ -110,10 +110,10 @@ abstract class TarefaBase with Store {
         .collection(collection)
         .where("user.id", isEqualTo: userKey)
         .orderBy("order")
-        .getDocuments();
-    this.tarefas = response.documents.map((f) {
+        .get();
+    this.tarefas = response.docs.map((f) {
       Tarefa t = Tarefa.fromJson(f.data());
-      t.key = f.documentID;
+      t.key = f.id;
       return t;
     }).toList();
     await this.updateDoneFromList(tarefas);
@@ -126,7 +126,7 @@ abstract class TarefaBase with Store {
     var response =
         await databaseReference.collection(collection).document(key).get();
     Tarefa tarefa = Tarefa.fromJson(response.data());
-    tarefa.key = response.documentID;
+    tarefa.key = response.id;
     return tarefa;
   }
 
@@ -141,8 +141,8 @@ abstract class TarefaBase with Store {
   Future<void> onlyUpdate(Tarefa tarefa) async {
     await databaseReference
         .collection(collection)
-        .document(tarefa.key)
-        .setData(tarefa.toJson());
+        .doc(tarefa.key)
+        .set(tarefa.toJson());
   }
 
   Future<void> updateDone(String idUser) async {
