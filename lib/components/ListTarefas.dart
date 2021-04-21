@@ -53,8 +53,8 @@ class _ListTarefasComponentState extends State<ListTarefasComponent> {
                   : new Text(formatDate(
                       this.widget.tarefas[i].timeOfDay, [HH, ':', nn])),
               onTap: () {
-                Navigator.pushNamed(
-                    context, '/edit-tarefa/' + this.widget.tarefas[i].key);
+                Modular.to
+                    .navigate('/edit-tarefa/' + this.widget.tarefas[i].key);
               },
               trailing: IconButton(
                 icon: Icon(

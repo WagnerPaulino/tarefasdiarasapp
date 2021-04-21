@@ -43,8 +43,7 @@ class MainDrawerComponent extends StatelessWidget {
             onTap: () {
               user.logout().then((v) {
                 tarefaStore.tarefas = [];
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/loading', (Route<dynamic> route) => false);
+                Modular.to.navigate('/loading', replaceAll: true);
               });
             },
           ),

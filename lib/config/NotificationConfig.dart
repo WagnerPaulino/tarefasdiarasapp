@@ -65,7 +65,7 @@ class NotificationConfig {
     );
   }
 
-  Future onSelectNotification(String payLoad) {
+  Future<void> onSelectNotification(String payLoad) {
     if (payLoad != null) {
       print(payLoad);
     }

@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<Tarefa>> findAll() async {
     var usuario = await user.getGoogleSignIn().signInSilently();
-    if (usuario.id == null) {
+    if (usuario == null) {
       return await Future.any([]);
     } else {
       return await tarefaStore.findAllByUserKey(usuario.id);
@@ -93,11 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/edit-tarefa').then((v) {
-          setState(() {
-            this.findAll();
-          });
-        }),
+        onPressed: () => Modular.to.navigate('/edit-tarefa'),
         tooltip: 'Adicionar Tarefa',
         child: Icon(Icons.add),
       ),

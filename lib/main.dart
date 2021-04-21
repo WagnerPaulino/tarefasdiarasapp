@@ -8,7 +8,7 @@ import 'app_module.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  return runApp(ModularApp(module: AppModule()));
+  return runApp(ModularApp(module: AppModule(), child: MyApp(),));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,9 +20,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       initialRoute: "/loading",
-      navigatorKey: Modular.navigatorKey,
-      onGenerateRoute: Modular.generateRoute,
-      home: MyHomePage(),
-    );
+    ).modular();
   }
 }

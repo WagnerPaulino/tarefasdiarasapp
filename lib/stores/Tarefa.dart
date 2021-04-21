@@ -1,6 +1,6 @@
 // flutter packages pub run build_runner build --delete-conflicting-outputs
-import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobx/mobx.dart';
 import 'package:tarefasdiarasapp/config/NotificationConfig.dart';
 
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
@@ -17,7 +17,7 @@ class TarefaStore = TarefaBase with _$TarefaStore;
 // The store-class
 
 abstract class TarefaBase with Store {
-  final databaseReference = Firestore.instance;
+  final databaseReference = FirebaseFirestore.instance;
 
   final UsuarioStore user = new UsuarioStore();
 
@@ -45,10 +45,6 @@ abstract class TarefaBase with Store {
         } else {
           await this.update(tarefa);
         }
-      } else {
-        return Future(() {
-          this.isSaving = false;
-        });
       }
     }).then((value) {
       this.notificationConfig.agendarNotificacoesTarefas(tarefas);
@@ -66,7 +62,6 @@ abstract class TarefaBase with Store {
         .doc()
         .set(tarefa.toJson())
         .then((value) {
-      this.isSaving = false;
     });
   }
 
@@ -77,7 +72,6 @@ abstract class TarefaBase with Store {
         .doc(tarefa.key)
         .set(tarefa.toJson())
         .then((value) {
-      this.isSaving = false;
     });
   }
 
@@ -124,7 +118,7 @@ abstract class TarefaBase with Store {
 
   Future<Tarefa> findOne(String key) async {
     var response =
-        await databaseReference.collection(collection).document(key).get();
+        await databaseReference.collection(collection).doc(key).get();
     Tarefa tarefa = Tarefa.fromJson(response.data());
     tarefa.key = response.id;
     return tarefa;

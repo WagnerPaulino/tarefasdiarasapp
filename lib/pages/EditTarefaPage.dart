@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 //import 'package:path_provider/path_provider.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
@@ -8,8 +9,7 @@ import 'package:date_format/date_format.dart';
 //import 'package:path/path.dart' show join;
 
 class EditTarefaPage extends StatefulWidget {
-  EditTarefaPage({Key key, this.tarefaKey})
-      : super(key: key);
+  EditTarefaPage({Key key, this.tarefaKey}) : super(key: key);
 
   final String tarefaKey;
 
@@ -56,19 +56,17 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
         title: Text('Minhas Tarefas'),
         actions: <Widget>[
           Observer(
-              builder: (_) => FlatButton(
+              builder: (_) => TextButton(
                   child: Text(
                     this.tarefaStore.isSaving ? "Salvando..." : "Salvar",
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: this.tarefaStore.isSaving
                       ? null
-                      : () {
+                      : () async {
                           if (_formKey.currentState.validate()) {
-                            tarefaStore.save(tarefa).then((v) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/', (Route<dynamic> route) => false);
-                            });
+                            await tarefaStore.save(tarefa);
+                            Modular.to.navigate('/', replaceAll: true);
                           }
                         }))
         ],
@@ -103,7 +101,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                     },
                     controller: detalheFieldCtl,
                   ),
-                  FlatButton(
+                  TextButton(
                     child: tarefa.timeOfDay == null
                         ? Text('Deseja marcar um horário?')
                         : Text(formatDate(tarefa.timeOfDay, [HH, ':', nn])),

@@ -48,12 +48,12 @@ class _SmashPageState extends State<SmashPage> {
             child: Text("Tarefas Diarias",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               this.user.login().then((v) {
                 if (v != null) {
                   print(v);
-                  Navigator.of(context).pushReplacementNamed("/");
+                  Modular.to.navigate("/", replaceAll: true);
                 }
               });
             },
