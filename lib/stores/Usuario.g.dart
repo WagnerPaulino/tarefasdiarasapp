@@ -12,13 +12,13 @@ mixin _$UsuarioStore on UsuarioBase, Store {
   final _$userAtom = Atom(name: 'UsuarioBase.user');
 
   @override
-  Usuario get user {
+  Usuario? get user {
     _$userAtom.reportRead();
     return super.user;
   }
 
   @override
-  set user(Usuario value) {
+  set user(Usuario? value) {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
     });

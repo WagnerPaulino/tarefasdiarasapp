@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class SmashPage extends StatefulWidget {
-  SmashPage({Key key}) : super(key: key);
+  SmashPage({Key? key}) : super(key: key);
 
   @override
   _SmashPageState createState() => _SmashPageState();

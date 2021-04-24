@@ -9,9 +9,9 @@ import 'package:date_format/date_format.dart';
 //import 'package:path/path.dart' show join;
 
 class EditTarefaPage extends StatefulWidget {
-  EditTarefaPage({Key key, this.tarefaKey}) : super(key: key);
+  EditTarefaPage({Key? key, this.tarefaKey}) : super(key: key);
 
-  final String tarefaKey;
+  final String? tarefaKey;
 
   @override
   _EditTarefaPageState createState() => _EditTarefaPageState();
@@ -42,8 +42,11 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
       tarefaStore.findOne(widget.tarefaKey).then((tarefa) {
         setState(() {
           this.tarefa = tarefa;
-          this.nomeFieldCtl.text = this.tarefa.nome;
-          this.detalheFieldCtl.text = this.tarefa.detalhe;
+          this.nomeFieldCtl.text = this.tarefa.nome!;
+          if(this.tarefa.detalhe == null) {
+            return;
+          }
+          this.detalheFieldCtl.text = this.tarefa.detalhe!;
         });
       });
     }
@@ -64,7 +67,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                   onPressed: this.tarefaStore.isSaving
                       ? null
                       : () async {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             await tarefaStore.save(tarefa);
                             Modular.to.navigate('/', replaceAll: true);
                           }
@@ -85,7 +88,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                       tarefa.nome = value;
                     },
                     validator: (v) {
-                      if (v.isEmpty) {
+                      if (v!.isEmpty) {
                         return "O Nome da Tarefa é Obrigatório";
                       } else {
                         return null;
@@ -104,17 +107,17 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                   TextButton(
                     child: tarefa.timeOfDay == null
                         ? Text('Deseja marcar um horário?')
-                        : Text(formatDate(tarefa.timeOfDay, [HH, ':', nn])),
+                        : Text(formatDate(tarefa.timeOfDay!, [HH, ':', nn])),
                     onPressed: () async {
                       final t = await showTimePicker(
                           context: context,
                           initialTime: tarefa.timeOfDay == null
                               ? TimeOfDay.now()
-                              : TimeOfDay.fromDateTime(tarefa.timeOfDay));
+                              : TimeOfDay.fromDateTime(tarefa.timeOfDay!));
                       setState(() {
                         final now = new DateTime.now();
                         tarefa.timeOfDay = new DateTime(
-                            now.year, now.month, now.day, t.hour, t.minute);
+                            now.year, now.month, now.day, t!.hour, t.minute);
                       });
                     },
                   ),

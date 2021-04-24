@@ -57,7 +57,7 @@ mixin _$TarefaStore on TarefaBase, Store {
   final _$TarefaBaseActionController = ActionController(name: 'TarefaBase');
 
   @override
-  Future<dynamic> save(Tarefa tarefa) {
+  Future<void> save(Tarefa tarefa) {
     final _$actionInfo =
         _$TarefaBaseActionController.startAction(name: 'TarefaBase.save');
     try {

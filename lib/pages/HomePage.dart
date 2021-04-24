@@ -8,7 +8,7 @@ import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -93,7 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Modular.to.navigate('/edit-tarefa'),
+        onPressed: () => Modular.to
+            .pushNamed('/edit-tarefa')
+            .then((value) => this.findAll()),
         tooltip: 'Adicionar Tarefa',
         child: Icon(Icons.add),
       ),

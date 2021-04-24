@@ -13,7 +13,7 @@ class UsuarioStore = UsuarioBase with _$UsuarioStore;
 
 abstract class UsuarioBase with Store {
   @observable
-  Usuario user;
+  Usuario? user;
 
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -24,11 +24,11 @@ abstract class UsuarioBase with Store {
     });
   }
 
-  Future<GoogleSignInAccount> login() {
+  Future<GoogleSignInAccount?> login() {
     return _googleSignIn.signIn();
   }
 
-  Future<GoogleSignInAccount> logout() {
+  Future<GoogleSignInAccount?> logout() {
     return _googleSignIn.signOut();
   }
 

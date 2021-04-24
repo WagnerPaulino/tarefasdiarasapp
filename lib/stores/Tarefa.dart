@@ -35,7 +35,7 @@ abstract class TarefaBase with Store {
   bool isSaving = false;
 
   @action
-  Future save(Tarefa tarefa) {
+  Future<void> save(Tarefa tarefa) {
     this.isSaving = true;
     return user.getGoogleSignIn().signInSilently().then((v) async {
       if (v != null) {
@@ -61,8 +61,7 @@ abstract class TarefaBase with Store {
         .collection(collection)
         .doc()
         .set(tarefa.toJson())
-        .then((value) {
-    });
+        .then((value) {});
   }
 
   Future<void> update(Tarefa tarefa) {
@@ -71,23 +70,18 @@ abstract class TarefaBase with Store {
         .collection(collection)
         .doc(tarefa.key)
         .set(tarefa.toJson())
-        .then((value) {
-    });
+        .then((value) {});
   }
 
   Future<void> delete(Tarefa tarefa) async {
-    await databaseReference
-        .collection(collection)
-        .doc(tarefa.key)
-        .delete();
+    await databaseReference.collection(collection).doc(tarefa.key).delete();
     this.notificationConfig.agendarNotificacoesTarefas(tarefas);
   }
 
   Future<List<Tarefa>> findAll() async {
     isLoadingList = true;
     this.tarefas = [];
-    var response =
-        await databaseReference.collection(collection).get();
+    var response = await databaseReference.collection(collection).get();
     this.tarefas = response.docs.map((f) {
       Tarefa t = Tarefa.fromJson(f.data());
       t.key = f.id;
@@ -116,18 +110,18 @@ abstract class TarefaBase with Store {
     return this.tarefas;
   }
 
-  Future<Tarefa> findOne(String key) async {
+  Future<Tarefa> findOne(String? key) async {
     var response =
         await databaseReference.collection(collection).doc(key).get();
-    Tarefa tarefa = Tarefa.fromJson(response.data());
+    Tarefa tarefa = Tarefa.fromJson(response.data()!);
     tarefa.key = response.id;
     return tarefa;
   }
 
-  Future<Tarefa> toggleDone(String key) async {
+  Future<Tarefa> toggleDone(String? key) async {
     var tarefa = await this.findOne(key);
     tarefa.doneUpdated = DateTime.now();
-    tarefa.done = !tarefa.done;
+    tarefa.done = !tarefa.done!;
     this.save(tarefa);
     return tarefa;
   }
@@ -141,6 +135,9 @@ abstract class TarefaBase with Store {
 
   Future<void> updateDone(String idUser) async {
     var v = await user.getGoogleSignIn().signInSilently();
+    if (v == null) {
+      return;
+    }
     List<Tarefa> tarefas = await this.findAllByUserKey(v.id);
     filterTarefaForUpdated(tarefas).forEach((t) async {
       t.done = false;
@@ -162,7 +159,7 @@ abstract class TarefaBase with Store {
   List<Tarefa> filterTarefaForUpdated(List<Tarefa> tarefas) {
     return tarefas
         .where((t) => DateTime(
-                t.doneUpdated.year, t.doneUpdated.month, t.doneUpdated.day)
+                t.doneUpdated!.year, t.doneUpdated!.month, t.doneUpdated!.day)
             .isBefore(DateTime(
                 DateTime.now().year, DateTime.now().month, DateTime.now().day)))
         .toList();
@@ -170,10 +167,10 @@ abstract class TarefaBase with Store {
 
   void reorderList(List<Tarefa> tas) async {
     for (int i = 0; i < tas.length; i++) {
-      print(tas[i].nome + tas[i].order.toString());
+      print(tas[i].nome! + tas[i].order.toString());
       if (tas[i].order != i) {
         tas[i].order = i;
-        print("Atualizado: " + tas[i].nome + tas[i].order.toString());
+        print("Atualizado: " + tas[i].nome! + tas[i].order.toString());
         await this.update(tas[i]);
       }
     }

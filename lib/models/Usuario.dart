@@ -5,10 +5,10 @@ Usuario userFromJson(String str) => Usuario.fromJson(json.decode(str));
 String userToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
-  String id;
-  String displayName;
-  String email;
-  String photoUrl;
+  String? id;
+  String? displayName;
+  String? email;
+  String? photoUrl;
 
   Usuario(var signIn, {this.id, this.displayName, this.email, this.photoUrl}) {
     if (signIn != null) {

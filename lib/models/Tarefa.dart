@@ -7,16 +7,16 @@ Tarefa tarefaFromJson(String str) => Tarefa.fromJson(json.decode(str));
 String tarefaToJson(Tarefa data) => json.encode(data.toJson());
 
 class Tarefa {
-  String key;
-  String nome;
-  String detalhe;
-  DateTime createdAt;
-  DateTime updatedAt;
-  DateTime timeOfDay;
-  DateTime doneUpdated;
-  bool done;
-  Usuario user;
-  int order;
+  String? key;
+  String? nome;
+  String? detalhe;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  DateTime? timeOfDay;
+  DateTime? doneUpdated;
+  bool? done;
+  Usuario? user;
+  int? order;
 
   Tarefa(
       {this.key,
@@ -51,7 +51,7 @@ class Tarefa {
         "timeOfDay": timeOfDay,
         "done": done,
         "doneUpdated": doneUpdated,
-        "user": this.user.toJson(),
+        "user": this.user!.toJson(),
         "order": order == null ? 0 : order
       };
 }

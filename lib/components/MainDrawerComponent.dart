@@ -8,7 +8,7 @@ class MainDrawerComponent extends StatelessWidget {
   final UsuarioStore user = Modular.get<UsuarioStore>();
   final TarefaStore tarefaStore = Modular.get<TarefaStore>();
 
-  Future<GoogleSignInAccount> loadUser() {
+  Future<GoogleSignInAccount?> loadUser() {
     return user.getGoogleSignIn().signInSilently();
   }
 
@@ -23,11 +23,11 @@ class MainDrawerComponent extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text('Tarefas Diarias'),
-                FutureBuilder<GoogleSignInAccount>(
+                FutureBuilder<GoogleSignInAccount?>(
                     future: loadUser(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        return renderPhotoUser(snapshot.data);
+                        return renderPhotoUser(snapshot.data!);
                       } else {
                         return Text('');
                       }
@@ -61,7 +61,7 @@ class MainDrawerComponent extends StatelessWidget {
   }
 
   String getEmailOrNameFromUsuario(GoogleSignInAccount usuario) {
-    return usuario.email == null ? usuario.displayName : usuario.email;
+    return usuario.email == null ? usuario.displayName! : usuario.email;
   }
 
   List<Widget> getPhotoWithNameFromUsuario(GoogleSignInAccount usuario) {
@@ -74,7 +74,7 @@ class MainDrawerComponent extends StatelessWidget {
       return [
         CircleAvatar(
           radius: 30.0,
-          backgroundImage: NetworkImage(usuario.photoUrl),
+          backgroundImage: NetworkImage(usuario.photoUrl!),
         ),
         Text(getEmailOrNameFromUsuario(usuario)),
       ];
