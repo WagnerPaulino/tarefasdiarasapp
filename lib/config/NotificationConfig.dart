@@ -2,21 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationConfig {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings? androidInitializationSettings;
   IOSInitializationSettings? iosInitializationSettings;
-  InitializationSettings? initializationSettings;
+  late InitializationSettings initializationSettings;
 
   Future initializing() async {
+    tz.initializeTimeZones();
     androidInitializationSettings = AndroidInitializationSettings('app_icon');
     iosInitializationSettings = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     initializationSettings = InitializationSettings(
         android: androidInitializationSettings, iOS: iosInitializationSettings);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings!,
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
     await flutterLocalNotificationsPlugin.cancelAll();
   }
@@ -36,13 +38,12 @@ class NotificationConfig {
 
   Future<void> notificationConfig(
       int id, String? title, String? body, Time time) async {
-    var dateTime = DateTime(DateTime.now().year, DateTime.now().month,
-        DateTime.now().day, time.hour, time.minute, 0);
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       title,
       body,
-      tz.TZDateTime.from(dateTime, tz.local),
+      tz.TZDateTime(tz.local, DateTime.now().year, DateTime.now().month,
+          time.hour, time.minute),
       const NotificationDetails(
         android: AndroidNotificationDetails(
             'tarefadiariaID', 'tarefadiariaTitle', 'tarefadiariaDescription',
@@ -55,8 +56,6 @@ class NotificationConfig {
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
-    // await flutterLocalNotificationsPlugin.showDailyAtTime(
-    //     id, title, body, time, notificationDetails);
   }
 
   Future onDidReceiveLocalNotification(
