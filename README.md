@@ -6,3 +6,8 @@ This project use
 * mobx
 * firebase firestore
 * firebase auth
+
+How to run
+```bash
+$ ./run.sh
+```
