@@ -43,7 +43,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
         setState(() {
           this.tarefa = tarefa;
           this.nomeFieldCtl.text = this.tarefa.nome!;
-          if(this.tarefa.detalhe == null) {
+          if (this.tarefa.detalhe == null) {
             return;
           }
           this.detalheFieldCtl.text = this.tarefa.detalhe!;

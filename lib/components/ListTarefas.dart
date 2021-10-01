@@ -4,6 +4,8 @@ import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
 import 'package:date_format/date_format.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
+import 'package:simple_url_preview/simple_url_preview.dart';
+import 'package:tarefasdiarasapp/utils/Utils.dart';
 
 class ListTarefasComponent extends StatefulWidget {
   ListTarefasComponent({Key? key, this.tarefas}) : super(key: key);
@@ -33,6 +35,17 @@ class _ListTarefasComponentState extends State<ListTarefasComponent> {
     }
   }
 
+  List<Widget> renderUrlPreview(List<String> links) {
+    return links
+        .map((link) => SimpleUrlPreview(
+              url: link,
+              previewContainerPadding: EdgeInsets.all(0),
+              previewHeight: 150,
+              isClosable: true,
+            ))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ReorderableListView(
@@ -59,10 +72,17 @@ class _ListTarefasComponentState extends State<ListTarefasComponent> {
               title: this.widget.tarefas![i].nome == null
                   ? new Text("")
                   : new Text(this.widget.tarefas![i].nome!),
-              subtitle: this.widget.tarefas![i].timeOfDay == null
-                  ? new Text("")
-                  : new Text(formatDate(
-                      this.widget.tarefas![i].timeOfDay!, [HH, ':', nn])),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  this.widget.tarefas![i].timeOfDay == null
+                      ? new Text("")
+                      : new Text(formatDate(
+                          this.widget.tarefas![i].timeOfDay!, [HH, ':', nn])),
+                  ...renderUrlPreview(
+                      Utils.extractUrl(this.widget.tarefas![i].detalhe ?? "")),
+                ],
+              ),
               onTap: () {
                 Modular.to
                     .pushNamed('/edit-tarefa/' + this.widget.tarefas![i].key!)
