@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -10,9 +14,10 @@ class NotificationConfig {
   AndroidInitializationSettings? androidInitializationSettings;
   IOSInitializationSettings? iosInitializationSettings;
   late InitializationSettings initializationSettings;
+  late String location; 
 
   Future initializing() async {
-    tz.initializeTimeZones();
+    await _configureLocalTimeZone();
     androidInitializationSettings = AndroidInitializationSettings('app_icon');
     iosInitializationSettings = IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
@@ -42,11 +47,11 @@ class NotificationConfig {
       0,
       title,
       body,
-      tz.TZDateTime(tz.local, DateTime.now().year, DateTime.now().month,
+      tz.TZDateTime(tz.getLocation(location), DateTime.now().year, DateTime.now().month,
           time.hour, time.minute),
       const NotificationDetails(
         android: AndroidNotificationDetails(
-            'tarefadiariaID', 'tarefadiariaTitle', 'tarefadiariaDescription',
+            'tarefadiariaID', 'tarefadiariaTitle',
             priority: Priority.high,
             importance: Importance.max,
             ticker: 'tarefasdiarias'),
@@ -72,6 +77,16 @@ class NotificationConfig {
         )
       ],
     );
+  }
+
+  Future<void> _configureLocalTimeZone() async {
+    if (kIsWeb || Platform.isLinux) {
+      return;
+    }
+    tz.initializeTimeZones();
+    final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(timeZoneName!));
+    this.location = timeZoneName;
   }
 
   Future<void> onSelectNotification(String? payLoad) async {
