@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
@@ -14,13 +11,12 @@ class NotificationConfig {
   AndroidInitializationSettings? androidInitializationSettings;
   IOSInitializationSettings? iosInitializationSettings;
   late InitializationSettings initializationSettings;
-  late String location; 
 
-  Future initializing() async {
-    await _configureLocalTimeZone();
-    androidInitializationSettings = AndroidInitializationSettings('app_icon');
-    iosInitializationSettings = IOSInitializationSettings(
-        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+  Future<void> initializing() async {
+    String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    tz.initializeTimeZones();
+    var loc = tz.getLocation(currentTimeZone);
+    tz.setLocalLocation(loc);
     initializationSettings = InitializationSettings(
         android: androidInitializationSettings, iOS: iosInitializationSettings);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
@@ -28,8 +24,14 @@ class NotificationConfig {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  NotificationConfig() {
+    androidInitializationSettings = AndroidInitializationSettings('app_icon');
+    iosInitializationSettings = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    
+  }
+
   Future<void> agendarNotificacoesTarefas(List<Tarefa> tarefas) async {
-    await this.initializing();
     for (int i = 0; i < tarefas.length; i++) {
       if (tarefas[i].timeOfDay != null) {
         String? body = tarefas[i].detalhe == null
@@ -47,7 +49,7 @@ class NotificationConfig {
       0,
       title,
       body,
-      tz.TZDateTime(tz.getLocation(location), DateTime.now().year, DateTime.now().month,
+      tz.TZDateTime(tz.local, DateTime.now().year, DateTime.now().month, DateTime.now().day,
           time.hour, time.minute),
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -65,6 +67,7 @@ class NotificationConfig {
 
   Future onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payLoad) async {
+    print("notificações disparada");
     return CupertinoAlertDialog(
       title: Text(title!),
       content: Text(body!),
@@ -77,16 +80,6 @@ class NotificationConfig {
         )
       ],
     );
-  }
-
-  Future<void> _configureLocalTimeZone() async {
-    if (kIsWeb || Platform.isLinux) {
-      return;
-    }
-    tz.initializeTimeZones();
-    final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timeZoneName!));
-    this.location = timeZoneName;
   }
 
   Future<void> onSelectNotification(String? payLoad) async {

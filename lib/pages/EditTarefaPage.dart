@@ -19,7 +19,7 @@ class EditTarefaPage extends StatefulWidget {
 
 class _EditTarefaPageState extends State<EditTarefaPage> {
   Tarefa tarefa = new Tarefa();
-  TarefaStore tarefaStore = TarefaStore();
+  TarefaStore tarefaStore = Modular.get<TarefaStore>();
   final _formKey = GlobalKey<FormState>();
   final nomeFieldCtl = TextEditingController();
   final detalheFieldCtl = TextEditingController();

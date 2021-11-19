@@ -5,7 +5,7 @@ import 'package:tarefasdiarasapp/config/NotificationConfig.dart';
 
 import 'package:tarefasdiarasapp/models/Tarefa.dart';
 import 'package:tarefasdiarasapp/models/Usuario.dart';
-
+import 'package:tarefasdiarasapp/main.dart' as main;
 import 'Usuario.dart';
 
 // Include generated file
@@ -21,7 +21,7 @@ abstract class TarefaBase with Store {
 
   final UsuarioStore user = new UsuarioStore();
 
-  final NotificationConfig notificationConfig = new NotificationConfig();
+  final NotificationConfig notificationConfig = main.notificationConfig;
 
   final collection = "tarefas";
 
@@ -33,6 +33,8 @@ abstract class TarefaBase with Store {
 
   @observable
   bool isSaving = false;
+
+  TarefaBase();
 
   @action
   Future<void> save(Tarefa tarefa) {
