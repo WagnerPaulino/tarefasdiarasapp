@@ -52,6 +52,68 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
     }
   }
 
+  Future<void> showDataPickerTimeOfDay() async {
+    final t = await showTimePicker(
+        context: context,
+        initialTime: tarefa.timeOfDay == null
+            ? TimeOfDay.now()
+            : TimeOfDay.fromDateTime(tarefa.timeOfDay!));
+    if (t?.hour != null && t?.minute != null) {
+      setState(() {
+        final now = new DateTime.now();
+        tarefa.timeOfDay =
+            new DateTime(now.year, now.month, now.day, t!.hour, t.minute);
+      });
+    }
+  }
+
+  Widget getHour() {
+    return Row(
+      children: [
+        Text("Horario: ", style: TextStyle(color: Colors.black)),
+        Text(formatDate(tarefa.timeOfDay!, [HH, ':', nn]))
+      ],
+    );
+  }
+
+  Widget getTextFormFields() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TextFormField(
+          decoration: const InputDecoration(labelText: 'Nome da Tarefa'),
+          onChanged: (value) {
+            tarefa.nome = value;
+          },
+          validator: (v) {
+            if (v!.isEmpty) {
+              return "O Nome da Tarefa é Obrigatório";
+            } else {
+              return null;
+            }
+          },
+          controller: nomeFieldCtl,
+        ),
+        TextFormField(
+          decoration: const InputDecoration(
+              labelText: 'Deseja adicionar algum detalhe?'),
+          onChanged: (value) {
+            tarefa.detalhe = value;
+          },
+          controller: detalheFieldCtl,
+        ),
+        TextButton(
+          child: tarefa.timeOfDay == null
+              ? Text(
+                  'Deseja marcar um horário?',
+                )
+              : getHour(),
+          onPressed: showDataPickerTimeOfDay,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,49 +141,9 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
         children: <Widget>[
           Form(
               key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Nome da Tarefa'),
-                    onChanged: (value) {
-                      tarefa.nome = value;
-                    },
-                    validator: (v) {
-                      if (v!.isEmpty) {
-                        return "O Nome da Tarefa é Obrigatório";
-                      } else {
-                        return null;
-                      }
-                    },
-                    controller: nomeFieldCtl,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: 'Deseja adicionar algum detalhe?'),
-                    onChanged: (value) {
-                      tarefa.detalhe = value;
-                    },
-                    controller: detalheFieldCtl,
-                  ),
-                  TextButton(
-                    child: tarefa.timeOfDay == null
-                        ? Text('Deseja marcar um horário?')
-                        : Text(formatDate(tarefa.timeOfDay!, [HH, ':', nn])),
-                    onPressed: () async {
-                      final t = await showTimePicker(
-                          context: context,
-                          initialTime: tarefa.timeOfDay == null
-                              ? TimeOfDay.now()
-                              : TimeOfDay.fromDateTime(tarefa.timeOfDay!));
-                      setState(() {
-                        final now = new DateTime.now();
-                        tarefa.timeOfDay = new DateTime(
-                            now.year, now.month, now.day, t!.hour, t.minute);
-                      });
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: getTextFormFields(),
               )),
           Flexible(
             child: Padding(
