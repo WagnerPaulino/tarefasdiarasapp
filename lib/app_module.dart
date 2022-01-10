@@ -1,10 +1,9 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tarefasdiarasapp/config/NotificationConfig.dart';
 import 'package:tarefasdiarasapp/pages/EditTarefaPage.dart';
 import 'package:tarefasdiarasapp/pages/HomePage.dart';
 import 'package:tarefasdiarasapp/pages/SmashPage.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
+import 'package:tarefasdiarasapp/stores/ThemeSwitch.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 
 class AppModule extends Module {
@@ -15,6 +14,7 @@ class AppModule extends Module {
   final List<Bind> binds = [
     Bind<UsuarioStore>((i) => UsuarioStore()),
     Bind<TarefaStore>((i) => TarefaStore()),
+    Bind<ThemeSwitchStore>((i) => ThemeSwitchStore()),
   ];
 
   @override

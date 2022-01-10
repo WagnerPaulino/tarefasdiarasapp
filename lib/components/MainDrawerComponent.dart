@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tarefasdiarasapp/stores/Tarefa.dart';
+import 'package:tarefasdiarasapp/stores/ThemeSwitch.dart';
 import 'package:tarefasdiarasapp/stores/Usuario.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class MainDrawerComponent extends StatelessWidget {
   final UsuarioStore user = Modular.get<UsuarioStore>();
   final TarefaStore tarefaStore = Modular.get<TarefaStore>();
+  final ThemeSwitchStore themeSwitchStore = Modular.get<ThemeSwitchStore>();
 
   Future<GoogleSignInAccount?> loadUser() {
     return user.getGoogleSignIn().signInSilently();
@@ -37,6 +39,12 @@ class MainDrawerComponent extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
+          ),
+          ListTile(
+            title: Text('Trocar Tema'),
+            onTap: () {
+              this.themeSwitchStore.changeTheme();
+            },
           ),
           ListTile(
             title: Text('Sair'),

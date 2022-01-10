@@ -39,30 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: MainDrawerComponent(),
       appBar: AppBar(
         title: Text('Minhas Tarefas'),
-        actions: <Widget>[
-//          FlatButton(
-//            onPressed: () {},
-//            child: Row(
-//              mainAxisSize: MainAxisSize.max,
-//              crossAxisAlignment: CrossAxisAlignment.center,
-//              mainAxisAlignment: MainAxisAlignment.center,
-//              children: <Widget>[
-//                Text(
-//                  "Novo ",
-//                  style: TextStyle(color: Colors.white),
-//                ),
-//                Icon(
-//                  Icons.add,
-//                  color: Colors.white,
-//                )
-//              ],
-//            ),
-//          )
-//          IconButton(
-//            onPressed: () => this.findAll(true),
-//            icon: Icon(Icons.refresh),
-//          )
-        ],
+        actions: <Widget>[],
       ),
       body: Column(
         children: <Widget>[

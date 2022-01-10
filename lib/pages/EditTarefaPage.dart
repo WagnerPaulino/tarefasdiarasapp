@@ -70,7 +70,7 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
   Widget getHour() {
     return Row(
       children: [
-        Text("Horario: ", style: TextStyle(color: Colors.black)),
+        Text("Horario: ", style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color)),
         Text(formatDate(tarefa.timeOfDay!, [HH, ':', nn]))
       ],
     );
