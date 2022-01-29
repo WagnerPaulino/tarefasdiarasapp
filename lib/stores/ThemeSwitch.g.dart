@@ -39,6 +39,17 @@ mixin _$ThemeSwitchStore on ThemeSwitchBase, Store {
   }
 
   @override
+  void setTheme(bool isLight) {
+    final _$actionInfo = _$ThemeSwitchBaseActionController.startAction(
+        name: 'ThemeSwitchBase.setTheme');
+    try {
+      return super.setTheme(isLight);
+    } finally {
+      _$ThemeSwitchBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLight: ${isLight}
